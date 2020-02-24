@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from os.path import dirname, join
+
+import torch
 from pkg_resources import DistributionNotFound, get_distribution
 
 try:
@@ -10,4 +13,11 @@ except DistributionNotFound:
     __version__ = 'unknown'
 finally:
     del get_distribution, DistributionNotFound
+
+
+try:
+    cpp_extension = torch.ops.load_library(join(dirname(__file__), 'pyronn_torch.so'))
+except Exception:
+    import pyronn_torch.codegen
+    cpp_extension = pyronn_torch.codegen.compile_shared_object()
 
