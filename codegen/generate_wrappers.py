@@ -179,6 +179,9 @@ def main():
         if hasattr(v, '__doc__'):
             print(v.__doc__)
 
+    shared_object_file = module.compiled_file.replace('.cpp', '.so')
+    copyfile(shared_object_file, join(args.output_folder, 'pyronn_torch.so'))
+
 
 if __name__ == '__main__':
     main()
