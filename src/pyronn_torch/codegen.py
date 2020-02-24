@@ -178,13 +178,11 @@ def generate_shared_object(output_folder=None, source_files=None, show_code=Fals
 
     extension = module.compile(extra_source_files=cuda_sources, extra_cuda_flags=['-arch=sm_35'], with_cuda=True)
 
-    for v in extension.__dict__.values():
-        if hasattr(v, '__doc__'):
-            print(v.__doc__)
-
     shared_object_file = module.compiled_file.replace('.cpp', '.so')
     copyfile(shared_object_file, join(output_folder, 'pyronn_torch.so'))
     copyfile(module.compiled_file, join(output_folder, 'pyronn_torch.cpp'))
+
+    return extension
 
 
 def main():
