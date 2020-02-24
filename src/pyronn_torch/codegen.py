@@ -99,7 +99,8 @@ void Cone_Projection_Kernel_Tex_Interp_Launcher(
     const int volume_height, const int volume_depth,
     const float volume_spacing_x, const float volume_spacing_y,
     const float volume_spacing_z, const int detector_width,
-    const int detector_height, const float step_size);"""),  # noqa
+    const int detector_height, const float step_size);
+"""),  # noqa
 'Parallel_Projection2D_Kernel_Launcher': CustomFunctionCall('Parallel_Projection2D_Kernel_Launcher',
                                              FieldPointerSymbol(volume_slice.name, volume_slice.dtype, const=True),
                                              FieldPointerSymbol(projections_1d.name, projections_1d.dtype, const=False),
@@ -183,6 +184,7 @@ def generate_shared_object(output_folder=None, source_files=None, show_code=Fals
 
     shared_object_file = module.compiled_file.replace('.cpp', '.so')
     copyfile(shared_object_file, join(output_folder, 'pyronn_torch.so'))
+    copyfile(module.compiled_file, join(output_folder, 'pyronn_torch.cpp'))
 
 
 def main():
