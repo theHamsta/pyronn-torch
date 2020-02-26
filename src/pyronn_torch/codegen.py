@@ -151,7 +151,7 @@ def generate_shared_object(output_folder=None, source_files=None, show_code=Fals
 
     object_cache = get_cache_config()['object_cache']
 
-    module_name = 'PYRO_NN'
+    module_name = 'pyronn_torch_cpp'
 
     if not output_folder:
         output_folder = dirname(__file__)
@@ -176,10 +176,13 @@ def generate_shared_object(output_folder=None, source_files=None, show_code=Fals
     if show_code:
         pystencils.show_code(module, custom_backend=FrameworkIntegrationPrinter())
 
-    extension = module.compile(extra_source_files=cuda_sources, extra_cuda_flags=['-arch=sm_35'], with_cuda=True)
+    extension = module.compile(extra_source_files=cuda_sources,
+                               extra_cuda_flags=['-arch=sm_35'],
+                               with_cuda=True,
+                               compile_module_name=module_name)
 
-    shared_object_file = module.compiled_file.replace('.cpp', '.so')
-    copyfile(shared_object_file, join(output_folder, 'pyronn_torch.so'))
+    shared_object_file = module.compiled_file
+    copyfile(shared_object_file, join(output_folder, module_name + '.so'))
     copyfile(module.compiled_file, join(output_folder, 'pyronn_torch.cpp'))
 
     return extension

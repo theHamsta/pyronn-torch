@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from os.path import dirname, join
+import sys
+from os.path import dirname
 
-import torch
 from pkg_resources import DistributionNotFound, get_distribution
+
+from pyronn_torch.conebeam import ConeBeamProjector
 
 try:
     # Change here if project is renamed and does not equal the package name
@@ -16,8 +18,12 @@ finally:
 
 
 try:
-    cpp_extension = torch.ops.load_library(join(dirname(__file__), 'pyronn_torch.so'))
-except Exception:
+    sys.path.append(dirname(__file__))
+    cpp_extension = __import__('pyronn_torch_cpp')
+except Exception as e:
+    import warnings
+    warnings.warn(str(e))
     import pyronn_torch.codegen
-    cpp_extension = pyronn_torch.codegen.compile_shared_object()
+    cpp_extension = pyronn_torch.codegen.generate_shared_object()
 
+__all__ = ['ConeBeamProjector', 'cpp_extension']
