@@ -65,10 +65,11 @@ cache:
   - "/c/Python37"
   - "$HOME/Library/Caches/Homebrew"
 deploy:
-  provider: pypi
-  user: "__token__"
-  password:
-    secure: InaJRipNoDcgiYlaQpkNangz4GX0j56z3jP9WYV+mphq6GOZnPDh4d9UikWiFnBpr9i6Q5+Rn6YJTLfohcqLfJEkoCVLSQ3Elie0gsZ0HQYnw1PIHa7mvgTgAcMigFghL1pMY/ELopR9+/AVg7l5PxCxWBnsgZn6LkUPFClly8nlKm/I1Mmb764EzJWx7o+SesmSxt5av0jGbfVPs6MQ/yB8mb1LuX/FHJ1D1FmnCgU6/CdpiwPE1gcfawMjQClBR11eTyN1d0GoLKOuV6l6rEI2b18eNW85t7aNl8Daqhwk+X4iMce/E1oUjVI8e8C3bztm4nuY/RpxccFnpP/hzdIng67GFyOQNDC//JmZkeO0BeA6gqJ8PG+HH/wboviE13ROVmwkxl1mNrovor6ucLo6OqWkh9nqnGhCisRigbO5UVVU9UKmQLLeB3Mrn819TbWXj2cOpHsxrDxqYRoBPNKtKa58PqCXzGtJZn/LrL/Ki4ioHcKAuc7jVSV55Giro1HdH0glLI7A9tg1QUhVHpMs6cq/l9xf+6Ifa6nCwCamrpwQCZhyRaqsyn9KaxTnmaNtM9Sj/HugMB/F91b729IVxrZ4H7Dg5sdVS1+ZY7gC+mBJLs0M+ILa7y/3erKKs21GA7yTPKfTszflB5q8jcBDcjP1sjjdokSigyZ689o=
+  provider: releases
+  api_key:
+    secure: P9tlJtzObP4Y+XlpjN0oWJtSBFD2QgLQKDJF2vXj/w+qBJDkXSk6KvRoNlGMnKAAIlM2Re56bNVkaZ+tJJn24DE9YK+2P49RJC7HvPGTXRoTmjhYdyFmuNWpo+rCeWgfjYioVOcyqwge2M4yZIg9x+ne+tCVoN/kJiCsVtsfaWo9MypynoEbfztoDTRvvQXJmVWLfvIQw5QAyqAicRIdycEWxwn0x7I7/Hz9mU/RcH/35W+dve8evco3pHYlKJO+wXJaQQdTHjwsfBmaPCIi1m5UVdOELZ+fEWp2sZi5nXhVX4ZHiWAgpNOv4R5fTEg98BzMECDB1xo9/HVCheyC2fv5LS5FyzOlS6/k+F+LfSp+K8f1cnXns3fiTmcOZazlRODC2LLjJi69HP8purZpZuPfRG8v4CmrALrrWUMz/DoHQwDr4EFjY/uIRWbFvB9PeITLxtKY2L5dGOWSKdmn/TmyIkXoFI9WwBP4dHgBEIPc+/FbIi/lAL5sSBzz2NS6wlNobz9PyVtCvWX2QwI7u7paoygAIjJwNi88Gv8Qg2q4Yy8d9ngrCX6SEmOFj4t562z3JV/3CXhnGEvR3PD9wjnZ2DL+fZrWizCwHuPUvtwqOHJ145gJ1ZGzJIdUu+y/BzqBHDIdvmJszCyOHtI+/vGbV8FmJMDMcYLpmZKXZo0=
+  file_glob: true
+  file: dist/*
+  draft: true
   on:
-    tags: true
-  distributions: "bdist_wheel"
+    repo: theHamsta/pyronn-torch
