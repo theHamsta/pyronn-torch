@@ -12,5 +12,5 @@ full:
     - cuda
   artifacts:
     paths:
-      - 'src/pyronn_torch/pyronn_layers_cpp.so'
+      - 'src/pyronn_torch/pyronn_torch_cpp.so'
       - 'dist'
