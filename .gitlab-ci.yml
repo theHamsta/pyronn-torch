@@ -26,6 +26,7 @@ minimal-windows:
     - conda env list
     - python -c "import numpy"
     - git submodule update --init --recursive
+    - pip install -e .
     - python setup.py bdist_wheel
   artifacts:
     paths:
