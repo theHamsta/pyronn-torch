@@ -1,0 +1,77 @@
+# Travis configuration file using the build matrix feature
+# Read more under http://docs.travis-ci.com/user/build-configuration/
+# THIS SCRIPT IS SUPPOSED TO BE AN EXAMPLE. MODIFY IT ACCORDING TO YOUR NEEDS!
+
+dist: bionic
+sudo: false
+language: python
+virtualenv:
+  system_site_packages: false
+addons:
+  apt:
+    update: true
+matrix:
+  fast_finish: true
+  allow_failures:
+    - os: osx
+    - os: windows
+  include:
+    - python: 3.5
+      env: DISTRIB="ubuntu" 
+      before_install:
+        - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - python: 3.6
+      before_install:
+        - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - python: 3.7
+      before_install:
+        - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - python: 3.8
+      before_install:
+        - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - name: "Conda"
+      env: DISTRIB="conda" PYTHON_VERSION="3.6" COVERAGE="false" LINT="false"
+      before_install:
+        - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - name: "Lint and documentation test"
+      env: DISTRIB="ubuntu" TOX_PYTHON_VERSION="py36" COVERAGE="false" LINT="true"
+    - name: "Python 3.7.2 on macOS"
+      os: osx
+      osx_image: xcode11  # Python 3.7.2 running on macOS 10.14.3
+      language: shell       # 'language: python' is an error on Travis CI macOS
+      before_install:
+       - brew update && brew upgrade python 
+       - brew install ninja
+       - alias python=python3  
+       - alias pip="python3 -m pip"
+       - shopt -s expand_aliases
+      before_cache:
+        - brew cleanup
+    - name: "Python 3.7.3 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell       # 'language: python' is an error on Travis CI Windows
+      before_install:
+       - choco install python
+       - python -m pip install --upgrade pip
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+install:
+  - source tests/travis_install.sh
+  - pip3 install -e .
+  - pip3 install torch || echo "failed to install machine learning stuff"
+before_script:
+  - git config --global user.email "stephan.seitz@fau.de"
+  - git config --global user.name "Stephan Seitz"
+script:
+  - export NO_GPU_EXECUTION=1
+  #- if [[ "$LINT" == "true" ]]; then flake8 src;python setup.py doctest; exit 0; fi
+
+after_success:
+  - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; codecov; fi
+after_script:
+  - travis-cleanup
+cache:
+  pip: true
+  directories:
+    - $HOME/miniconda
+    - /c/Python37
+    - $HOME/Library/Caches/Homebrew
