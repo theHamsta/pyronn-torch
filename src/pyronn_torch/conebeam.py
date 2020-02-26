@@ -37,7 +37,7 @@ class ConeBeamProjector:
 
         def forward(self, volume):
             volume = volume.cuda().contiguous()
-            projection = torch.zeros(self.projection_shape, device='cuda')
+            projection = torch.zeros(self.projection_shape, device='cuda', requires_grad=volume.requires_grad)
 
             assert pyronn_torch.cpp_extension
             if self.with_texture:
@@ -133,7 +133,7 @@ class ConeBeamProjector:
                                       self._volume_shape,
                                       self._projection_multiplier,
                                       step_size,
-                                      use_texture).forward(volume)
+                                      use_texture).forward(volume)[0]
 
     def project_backward(self, projection_stack):
         return self.BackwardProjection(projection_stack)
