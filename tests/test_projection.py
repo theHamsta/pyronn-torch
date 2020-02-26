@@ -32,4 +32,3 @@ def test_projection(with_texture, with_backward):
 
         loss = result.mean()
         loss.backward()
-
