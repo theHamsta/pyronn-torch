@@ -24,6 +24,6 @@ except Exception as e:
     import warnings
     warnings.warn(str(e))
     import pyronn_torch.codegen
-    cpp_extension = pyronn_torch.codegen.generate_shared_object()
+    cpp_extension = pyronn_torch.codegen.compile_shared_object()
 
 __all__ = ['ConeBeamProjector', 'cpp_extension']

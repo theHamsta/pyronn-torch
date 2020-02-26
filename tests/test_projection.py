@@ -6,6 +6,8 @@
 """
 
 """
+import pytest
+
 import pyronn_torch
 
 
@@ -13,7 +15,8 @@ def test_init():
     assert pyronn_torch.cpp_extension
 
 
-def test_projection():
+@pytest.mark.parametrize('with_texture', ('with_texture', False))
+def test_projection(with_texture):
     projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
 
     volume = projector.new_volume_tensor()
