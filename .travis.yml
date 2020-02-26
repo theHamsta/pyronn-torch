@@ -70,7 +70,6 @@ deploy:
       secure: P9tlJtzObP4Y+XlpjN0oWJtSBFD2QgLQKDJF2vXj/w+qBJDkXSk6KvRoNlGMnKAAIlM2Re56bNVkaZ+tJJn24DE9YK+2P49RJC7HvPGTXRoTmjhYdyFmuNWpo+rCeWgfjYioVOcyqwge2M4yZIg9x+ne+tCVoN/kJiCsVtsfaWo9MypynoEbfztoDTRvvQXJmVWLfvIQw5QAyqAicRIdycEWxwn0x7I7/Hz9mU/RcH/35W+dve8evco3pHYlKJO+wXJaQQdTHjwsfBmaPCIi1m5UVdOELZ+fEWp2sZi5nXhVX4ZHiWAgpNOv4R5fTEg98BzMECDB1xo9/HVCheyC2fv5LS5FyzOlS6/k+F+LfSp+K8f1cnXns3fiTmcOZazlRODC2LLjJi69HP8purZpZuPfRG8v4CmrALrrWUMz/DoHQwDr4EFjY/uIRWbFvB9PeITLxtKY2L5dGOWSKdmn/TmyIkXoFI9WwBP4dHgBEIPc+/FbIi/lAL5sSBzz2NS6wlNobz9PyVtCvWX2QwI7u7paoygAIjJwNi88Gv8Qg2q4Yy8d9ngrCX6SEmOFj4t562z3JV/3CXhnGEvR3PD9wjnZ2DL+fZrWizCwHuPUvtwqOHJ145gJ1ZGzJIdUu+y/BzqBHDIdvmJszCyOHtI+/vGbV8FmJMDMcYLpmZKXZo0=
     file_glob: true
     file: dist/*
-    draft: true
     skip_cleanup: true
     on:
       repo: theHamsta/pyronn-torch
