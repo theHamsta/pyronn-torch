@@ -41,8 +41,6 @@ if __name__ == "__main__":
                             [generated_file] + cuda_sources,
                             extra_compile_args={'cxx': ['--std=c++14'],
                                                 'nvcc': ['-arch=sm_35']})
-
-
           ],
           cmdclass={
               'build_ext': BuildExtension
