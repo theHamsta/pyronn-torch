@@ -151,7 +151,7 @@ try:
             }
 except Exception as e:
     import warnings
-    warnings.warn(e)
+    warnings.warn(str(e))
 
 
 def generate_shared_object(output_folder=None, source_files=None, show_code=False):
