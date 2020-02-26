@@ -63,7 +63,7 @@ before_script:
   - git config --global user.email "stephan.seitz@fau.de"
   - git config --global user.name "Stephan Seitz"
 script:
-  - export NO_GPU_EXECUTION=1
+  - python setup.py bdist_wheel
   #- if [[ "$LINT" == "true" ]]; then flake8 src;python setup.py doctest; exit 0; fi
 
 after_success:
