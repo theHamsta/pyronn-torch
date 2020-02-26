@@ -49,11 +49,6 @@ pip3 install tox
 pip3 install codecov
 pip3 install sphinx
 
-if [[ -z "$PYSTENCIL_FROM_PIP" ]]; then
-    pip install git+https://github.com/mabau/pystencils.git
-else
-    pip install pystencils
-fi
 pip install flake8
 
 if [[ "$COVERAGE" == "true" ]]; then
