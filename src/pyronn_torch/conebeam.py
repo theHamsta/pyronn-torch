@@ -47,7 +47,7 @@ class ConeBeamProjector:
                     self.source_points,
                     self.step_size,
                     volume,
-                    *reversed(self.volume_spacing))
+                    *self.volume_spacing)
             else:
                 pyronn_torch.cpp_extension.call_Cone_Projection_Kernel_Launcher(
                     self.inverse_matrices,
@@ -55,7 +55,7 @@ class ConeBeamProjector:
                     self.source_points,
                     self.step_size,
                     volume,
-                    *reversed(self.volume_spacing))
+                    *self.volume_spacing)
 
             return projection,
 
@@ -70,8 +70,8 @@ class ConeBeamProjector:
                 projection_grad,
                 self.projection_multiplier,
                 volume_grad,
-                *reversed(self.volume_origin),
-                *reversed(self.volume_spacing))
+                self.volume_origin,
+                self.volume_spacing)
 
             return volume_grad,
 
@@ -142,7 +142,7 @@ class ConeBeamProjector:
         if self._projection_matrices_numpy is None:
             return
         self._projection_matrices = torch.stack(tuple(
-            map(torch.from_numpy, self._projection_matrices_numpy))).cuda().contiguous()
+            map(torch.from_numpy, self._projection_matrices_numpy))).cpu().contiguous()
 
         inv_spacing = np.array([1/s for s in reversed(self._volume_spacing)], np.float32)
 
@@ -154,6 +154,6 @@ class ConeBeamProjector:
         inv_matrices = map(lambda x: (np.linalg.inv(x[:3, :3]) *
                                       inv_spacing).astype(np.float32), self._projection_matrices_numpy)
 
-        self._inverse_matrices = torch.stack(tuple(map(torch.from_numpy, inv_matrices))).cuda().contiguous()
-        self._source_points = torch.stack(tuple(map(torch.from_numpy, source_points))).cuda().contiguous()
+        self._inverse_matrices = torch.stack(tuple(map(torch.from_numpy, inv_matrices))).cpu().contiguous()
+        self._source_points = torch.stack(tuple(map(torch.from_numpy, source_points))).cpu().contiguous()
         self._projection_multiplier = 1.

@@ -170,8 +170,7 @@ def generate_shared_object(output_folder=None, source_files=None, show_code=Fals
         copyfile(s, dst)  # Torch only accepts *.cu as CUDA
         cuda_sources.append(dst)
 
-    functions = [WrapperFunction(Block([v]), function_name=k) for k, v in FUNCTIONS.items()]
-    module = TorchModule(module_name, functions, wrap_wrapper_functions=True)
+    module = TorchModule(module_name, FUNCTIONS.values())
 
     if show_code:
         pystencils.show_code(module, custom_backend=FrameworkIntegrationPrinter())
@@ -183,7 +182,9 @@ def generate_shared_object(output_folder=None, source_files=None, show_code=Fals
 
     shared_object_file = module.compiled_file
     copyfile(shared_object_file, join(output_folder, module_name + '.so'))
-    copyfile(module.compiled_file, join(output_folder, 'pyronn_torch.cpp'))
+    if show_code:
+        with open(join(output_folder, 'pyronn_torch.cpp'), 'w') as f:
+            f.write(pystencils.get_code_str(module, custom_backend=FrameworkIntegrationPrinter()))
 
     return extension
 
