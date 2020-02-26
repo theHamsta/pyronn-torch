@@ -29,10 +29,6 @@ matrix:
     - python: 3.8
       before_install:
         - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
-    - name: "Conda"
-      env: DISTRIB="conda" PYTHON_VERSION="3.6" COVERAGE="false" LINT="false"
-      before_install:
-        - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
     - name: "Lint and documentation test"
       env: DISTRIB="ubuntu" TOX_PYTHON_VERSION="py36" COVERAGE="false" LINT="true"
     - name: "Python 3.7.2 on macOS"
