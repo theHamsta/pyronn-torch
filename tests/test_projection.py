@@ -9,13 +9,12 @@
 import pyronn_torch
 
 
-def init():
+def test_init():
     assert pyronn_torch.cpp_extension
 
 
 def test_projection():
-    breakpoint()
-    projector = pyronn_torch.ConeBeamProjector()
+    projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
 
     volume = projector.new_volume_tensor()
 

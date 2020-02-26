@@ -78,37 +78,40 @@ class ConeBeamProjector:
     class BackwardProjection(torch.autograd.Function):
         pass
 
-    # def __init__(self,
-        # volume_shape,
-        # volume_spacing,
-        # volume_origin,
-        # projection_shape,
-        # projection_spacing,
-        # projection_origin,
-        # projection_matrices):
-        # self._volume_shape = volume_shape
-        # self._volume_origin = volume_origin
-        # self._volume_spacing = volume_spacing
-        # self._projection_shape = projection_shape
-        # self._projection_matrices = projection_matrices
-        # self._projection_spacing = projection_spacing
-        # self._projection_origin = projection_origin
-        # self._calc_inverse_matrices()
+    def __init__(self,
+                 volume_shape,
+                 volume_spacing,
+                 volume_origin,
+                 projection_shape,
+                 projection_spacing,
+                 projection_origin,
+                 projection_matrices):
+        self._volume_shape = volume_shape
+        self._volume_origin = volume_origin
+        self._volume_spacing = volume_spacing
+        self._projection_shape = projection_shape
+        self._projection_matrices_numpy = projection_matrices
+        self._projection_spacing = projection_spacing
+        self._projection_origin = projection_origin
+        self._calc_inverse_matrices()
 
-    def __init__(self):
+    @classmethod
+    def from_conrad_config(cls):
+        obj = cls(*([None]*7))
         import pyconrad.autoinit
         import pyconrad.config
-        self._volume_shape = pyconrad.config.get_reco_shape()
-        self._volume_spacing = pyconrad.config.get_reco_spacing()
-        self._volume_origin = pyconrad.config.get_reco_origin()
-        self._projection_shape = pyconrad.config.get_sino_shape()
-        self._projection_spacing = [pyconrad.config.get_geometry().getPixelDimensionY(),
-                                    pyconrad.config.get_geometry().getPixelDimensionX()]
-        self._projection_origin = [pyconrad.config.get_geometry().getDetectorOffsetV(),
-                                   pyconrad.config.get_geometry().getDetectorOffsetU()]
-        self._projection_matrices_numpy = pyconrad.config.get_projection_matrices()
+        obj._volume_shape = pyconrad.config.get_reco_shape()
+        obj._volume_spacing = pyconrad.config.get_reco_spacing()
+        obj._volume_origin = pyconrad.config.get_reco_origin()
+        obj._projection_shape = pyconrad.config.get_sino_shape()
+        obj._projection_spacing = [pyconrad.config.get_geometry().getPixelDimensionY(),
+                                   pyconrad.config.get_geometry().getPixelDimensionX()]
+        obj._projection_origin = [pyconrad.config.get_geometry().getDetectorOffsetV(),
+                                  pyconrad.config.get_geometry().getDetectorOffsetU()]
+        obj._projection_matrices_numpy = pyconrad.config.get_projection_matrices()
 
-        self._calc_inverse_matrices()
+        obj._calc_inverse_matrices()
+        return obj
 
     def new_volume_tensor(self, requires_grad=False):
         return torch.zeros(self._volume_shape, requires_grad=requires_grad).cuda()
@@ -131,6 +134,8 @@ class ConeBeamProjector:
         return self.BackwardProjection(projection_stack)
 
     def _calc_inverse_matrices(self):
+        if self._projection_matrices_numpy is None:
+            return
         self._projection_matrices = torch.stack(tuple(
             map(torch.from_numpy, self._projection_matrices_numpy))).cuda().contiguous()
 
