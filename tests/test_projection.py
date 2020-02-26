@@ -23,7 +23,7 @@ def test_projection(with_texture, with_backward):
     volume = projector.new_volume_tensor(requires_grad=True if with_backward else False)
 
     volume += 1.
-    result = projector.project_forward(volume, use_texture=False)
+    result = projector.project_forward(volume, use_texture=with_texture)
 
     assert result is not None
     if with_backward:
