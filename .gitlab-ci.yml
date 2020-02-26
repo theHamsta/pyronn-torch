@@ -1,0 +1,13 @@
+full:
+  stage: test
+  image: i10git.cs.fau.de:5005/pycodegen/pycodegen/full
+  script:
+    - git submodule update --init --recursive
+    - python -m pip install -e .
+    - python setup.py test
+  tags:
+    - docker
+    - cuda
+  artifacts:
+    paths:
+      - 'src/pyronn_torch/pyronn_layers_cpp.so'
