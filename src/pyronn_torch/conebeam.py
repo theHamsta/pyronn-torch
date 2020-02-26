@@ -97,20 +97,25 @@ class ConeBeamProjector:
 
     @classmethod
     def from_conrad_config(cls):
-        obj = cls(*([None]*7))
         import pyconrad.autoinit
         import pyconrad.config
-        obj._volume_shape = pyconrad.config.get_reco_shape()
-        obj._volume_spacing = pyconrad.config.get_reco_spacing()
-        obj._volume_origin = pyconrad.config.get_reco_origin()
-        obj._projection_shape = pyconrad.config.get_sino_shape()
-        obj._projection_spacing = [pyconrad.config.get_geometry().getPixelDimensionY(),
-                                   pyconrad.config.get_geometry().getPixelDimensionX()]
-        obj._projection_origin = [pyconrad.config.get_geometry().getDetectorOffsetV(),
-                                  pyconrad.config.get_geometry().getDetectorOffsetU()]
-        obj._projection_matrices_numpy = pyconrad.config.get_projection_matrices()
+        volume_shape = pyconrad.config.get_reco_shape()
+        volume_spacing = pyconrad.config.get_reco_spacing()
+        volume_origin = pyconrad.config.get_reco_origin()
+        projection_shape = pyconrad.config.get_sino_shape()
+        projection_spacing = [pyconrad.config.get_geometry().getPixelDimensionY(),
+                              pyconrad.config.get_geometry().getPixelDimensionX()]
+        projection_origin = [pyconrad.config.get_geometry().getDetectorOffsetV(),
+                             pyconrad.config.get_geometry().getDetectorOffsetU()]
+        projection_matrices = pyconrad.config.get_projection_matrices()
 
-        obj._calc_inverse_matrices()
+        obj = cls(volume_shape,
+                  volume_spacing,
+                  volume_origin,
+                  projection_shape,
+                  projection_spacing,
+                  projection_origin,
+                  projection_matrices)
         return obj
 
     def new_volume_tensor(self, requires_grad=False):
