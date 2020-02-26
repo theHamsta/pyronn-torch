@@ -44,7 +44,6 @@ fi
 
 # for all
 pip3 install -U pip wheel setuptools
-pip3 install -U cppimport pybind11
 pip3 install tox
 pip3 install codecov
 pip3 install sphinx

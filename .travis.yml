@@ -56,6 +56,7 @@ matrix:
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 install:
   - source tests/travis_install.sh
+  - pip3 install torch
   - pip3 install -e .
   - pip3 install torch || echo "failed to install machine learning stuff"
 before_script:
