@@ -268,8 +268,8 @@ def main():
     parser.add_argument('--source-files',  default=None)
     args = parser.parse_args()
 
-    # generate_shared_object(args.output_folder, args.source_files, show_code=True)
-    compile_shared_object(args.output_folder, args.source_files)
+    generate_shared_object(args.output_folder, args.source_files, show_code=True)
+    # compile_shared_object(args.output_folder, args.source_files)
 
 
 if __name__ == '__main__':
