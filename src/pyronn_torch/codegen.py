@@ -51,7 +51,7 @@ try:
                                                  TypedSymbol('volume_origin_z', create_type('float32'), const=True),
                                                  *[FieldShapeSymbol(['projection'], i) for i in range(2, 0, -1)],
                                                  TypedSymbol('projection_multiplier',
-                                                             create_type('float32'), const=True),
+                                                             create_type('float32'), const=True), backend='gpucuda',
                                                  fields_accessed=[volume, projection, projection_matrices], custom_signature="""
     void Cone_Backprojection3D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *projection_matrices, const int number_of_projections,
                                               const int volume_width, const int volume_height, const int volume_depth,
@@ -73,7 +73,9 @@ try:
                                                  TypedSymbol('volume_spacing_z', create_type('float32'), const=True),
                                                  *[FieldShapeSymbol(['projection'], i) for i in range(2, 0, -1)],
                                                  TypedSymbol('step_size', create_type('float32'), const=True),
-                                                 fields_accessed=[volume, projection, inv_matrices, source_points], custom_signature="""
+                                                 backend='gpucuda',
+                                                 fields_accessed=[volume, projection, inv_matrices, source_points],
+                                                 custom_signature="""
     void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const float *inv_AR_matrix, const float *src_points, 
                                         const int number_of_projections, const int volume_width, const int volume_height, const int volume_depth, 
                                         const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
@@ -93,7 +95,9 @@ try:
                                                  TypedSymbol('volume_spacing_z', create_type('float32'), const=True),
                                                  *[FieldShapeSymbol(['projection'], i) for i in range(2, 0, -1)],
                                                  TypedSymbol('step_size', create_type('float32'), const=True),
-                                                 fields_accessed=[volume, projection, inv_matrices, source_points], custom_signature="""
+                                                 backend='gpucuda',
+                                                 fields_accessed=[volume, projection, inv_matrices, source_points],
+                                                 custom_signature="""
     void Cone_Projection_Kernel_Tex_Interp_Launcher(
         const float *__restrict__ volume_ptr, float *out,
         const float *inv_AR_matrix, const float *src_points,
@@ -118,6 +122,7 @@ try:
                                                  FieldShapeSymbol([projections_1d.name], 1),
                                                  TypedSymbol('detector_spacing', create_type('float32'), const=True),
                                                  TypedSymbol('detector_origin', create_type('float32'), const=True),
+                                                 backend='gpucuda',
                                                  fields_accessed=[volume_slice, projections_1d, ray_vectors], custom_signature="""
     void Parallel_Projection2D_Kernel_Launcher(
         const float *volume_ptr, float *out, const float *ray_vectors,
@@ -142,6 +147,7 @@ try:
                                                  FieldShapeSymbol([projections_1d.name], 1),
                                                  TypedSymbol('detector_spacing', create_type('float32'), const=True),
                                                  TypedSymbol('detector_origin', create_type('float32'), const=True),
+                                                 backend='gpucuda',
                                                  fields_accessed=[volume_slice, projections_1d, ray_vectors], custom_signature="""
     void Parallel_Backprojection2D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *ray_vectors, const int number_of_projections,
                                                    const int volume_width, const int volume_height, const float volume_spacing_x, const float volume_spacing_y,
