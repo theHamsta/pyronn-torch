@@ -85,7 +85,7 @@ Usage
     projection = projector.new_projection_tensor(requires_grad=True)
 
     projection += 1.
-    result = projector.project_backward(projection, use_texture=with_texture)
+    result = projector.project_backward(projection, use_texture=True)
 
     assert projection.requires_grad
     assert result.requires_grad
