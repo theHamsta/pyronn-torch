@@ -31,3 +31,13 @@ def test_wrap_tensorflow():
 
     generate_shared_object(tempfile.TemporaryDirectory, None, show_code=True,
                            framework_module_class=TensorflowModule, generate_code_only=True)
+
+
+def test_wrap_torch():
+    import pytest
+    pytest.importorskip("pystencils_autodiff")
+
+    from pystencils_autodiff.backends.astnodes import TorchModule
+
+    generate_shared_object(tempfile.TemporaryDirectory, None, show_code=True,
+                           framework_module_class=TorchModule, generate_code_only=True)
