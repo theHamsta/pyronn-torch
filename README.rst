@@ -56,6 +56,8 @@ Usage
  
 .. code-block:: python
 
+   import pyronn_torch
+
     #ConeBeamProjector(volume_shape,
     #                  volume_spacing,
     #                  volume_origin,
