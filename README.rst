@@ -2,6 +2,9 @@
    :target: https://badge.fury.io/py/pyronn-torch
    :alt: PyPI version
 
+.. image:: https://travis-ci.org/theHamsta/pyronn-torch.svg?branch=master
+    :target: https://travis-ci.org/theHamsta/pyronn-torch
+
 ============
 pyronn-torch
 ============
