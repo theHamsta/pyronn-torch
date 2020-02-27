@@ -24,4 +24,10 @@ def test_wrap_walberla():
 
 
 def test_wrap_tensorflow():
-    pass
+    import pytest
+    pytest.importorskip("pystencils_autodiff")
+
+    from pystencils_autodiff.backends.astnodes import TensorflowModule
+
+    generate_shared_object(tempfile.TemporaryDirectory, None, show_code=True,
+                           framework_module_class=TensorflowModule, generate_code_only=True)
