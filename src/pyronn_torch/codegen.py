@@ -231,8 +231,8 @@ def compile_shared_object(output_folder=None, source_files=None):
     torch_extension = load(module_name,
                            [generated_file] + cuda_sources,
                            with_cuda=True,
-                           extra_cflags=['--std=c++14'],
-                           extra_cuda_cflags=['-std=c++14', '-arch=sm_35'],
+                           extra_cflags=[],
+                           extra_cuda_cflags=['-arch=sm_35'],
                            build_directory=join(object_cache, module_name),
                            extra_include_paths=[])
     shared_object_file = join(object_cache, module_name, module_name + '.so')
