@@ -70,22 +70,13 @@ deploy:
       secure: P9tlJtzObP4Y+XlpjN0oWJtSBFD2QgLQKDJF2vXj/w+qBJDkXSk6KvRoNlGMnKAAIlM2Re56bNVkaZ+tJJn24DE9YK+2P49RJC7HvPGTXRoTmjhYdyFmuNWpo+rCeWgfjYioVOcyqwge2M4yZIg9x+ne+tCVoN/kJiCsVtsfaWo9MypynoEbfztoDTRvvQXJmVWLfvIQw5QAyqAicRIdycEWxwn0x7I7/Hz9mU/RcH/35W+dve8evco3pHYlKJO+wXJaQQdTHjwsfBmaPCIi1m5UVdOELZ+fEWp2sZi5nXhVX4ZHiWAgpNOv4R5fTEg98BzMECDB1xo9/HVCheyC2fv5LS5FyzOlS6/k+F+LfSp+K8f1cnXns3fiTmcOZazlRODC2LLjJi69HP8purZpZuPfRG8v4CmrALrrWUMz/DoHQwDr4EFjY/uIRWbFvB9PeITLxtKY2L5dGOWSKdmn/TmyIkXoFI9WwBP4dHgBEIPc+/FbIi/lAL5sSBzz2NS6wlNobz9PyVtCvWX2QwI7u7paoygAIjJwNi88Gv8Qg2q4Yy8d9ngrCX6SEmOFj4t562z3JV/3CXhnGEvR3PD9wjnZ2DL+fZrWizCwHuPUvtwqOHJ145gJ1ZGzJIdUu+y/BzqBHDIdvmJszCyOHtI+/vGbV8FmJMDMcYLpmZKXZo0=
     file_glob: true
     file: dist/*
-    draft: true
-    skip_cleanup: true
-    on:
-      repo: theHamsta/pyronn-torch
-  - provider: releases
-    api_key:
-      secure: P9tlJtzObP4Y+XlpjN0oWJtSBFD2QgLQKDJF2vXj/w+qBJDkXSk6KvRoNlGMnKAAIlM2Re56bNVkaZ+tJJn24DE9YK+2P49RJC7HvPGTXRoTmjhYdyFmuNWpo+rCeWgfjYioVOcyqwge2M4yZIg9x+ne+tCVoN/kJiCsVtsfaWo9MypynoEbfztoDTRvvQXJmVWLfvIQw5QAyqAicRIdycEWxwn0x7I7/Hz9mU/RcH/35W+dve8evco3pHYlKJO+wXJaQQdTHjwsfBmaPCIi1m5UVdOELZ+fEWp2sZi5nXhVX4ZHiWAgpNOv4R5fTEg98BzMECDB1xo9/HVCheyC2fv5LS5FyzOlS6/k+F+LfSp+K8f1cnXns3fiTmcOZazlRODC2LLjJi69HP8purZpZuPfRG8v4CmrALrrWUMz/DoHQwDr4EFjY/uIRWbFvB9PeITLxtKY2L5dGOWSKdmn/TmyIkXoFI9WwBP4dHgBEIPc+/FbIi/lAL5sSBzz2NS6wlNobz9PyVtCvWX2QwI7u7paoygAIjJwNi88Gv8Qg2q4Yy8d9ngrCX6SEmOFj4t562z3JV/3CXhnGEvR3PD9wjnZ2DL+fZrWizCwHuPUvtwqOHJ145gJ1ZGzJIdUu+y/BzqBHDIdvmJszCyOHtI+/vGbV8FmJMDMcYLpmZKXZo0=
-    file_glob: true
-    file: dist/*
     skip_cleanup: true
     on:
       tags: true
   - provider: pypi
-    user: "__token__"
+    user: __token__
     password:
-      secure: InaJRipNoDcgiYlaQpkNangz4GX0j56z3jP9WYV+mphq6GOZnPDh4d9UikWiFnBpr9i6Q5+Rn6YJTLfohcqLfJEkoCVLSQ3Elie0gsZ0HQYnw1PIHa7mvgTgAcMigFghL1pMY/ELopR9+/AVg7l5PxCxWBnsgZn6LkUPFClly8nlKm/I1Mmb764EzJWx7o+SesmSxt5av0jGbfVPs6MQ/yB8mb1LuX/FHJ1D1FmnCgU6/CdpiwPE1gcfawMjQClBR11eTyN1d0GoLKOuV6l6rEI2b18eNW85t7aNl8Daqhwk+X4iMce/E1oUjVI8e8C3bztm4nuY/RpxccFnpP/hzdIng67GFyOQNDC//JmZkeO0BeA6gqJ8PG+HH/wboviE13ROVmwkxl1mNrovor6ucLo6OqWkh9nqnGhCisRigbO5UVVU9UKmQLLeB3Mrn819TbWXj2cOpHsxrDxqYRoBPNKtKa58PqCXzGtJZn/LrL/Ki4ioHcKAuc7jVSV55Giro1HdH0glLI7A9tg1QUhVHpMs6cq/l9xf+6Ifa6nCwCamrpwQCZhyRaqsyn9KaxTnmaNtM9Sj/HugMB/F91b729IVxrZ4H7Dg5sdVS1+ZY7gC+mBJLs0M+ILa7y/3erKKs21GA7yTPKfTszflB5q8jcBDcjP1sjjdokSigyZ689o=
+      secure: ZWfigSArT7KLg2Y6HV/gYdplbcx3//yO/wGCJZYzF92gd44EvgY3B3JPmGfZqd/Wg9j3kxrKaH9CYkSJ+s7TT6v7X23fEUpna7YCXzpsSC3iWdKUAfxkQsH7PXWCEBoZ5qqzUQFvnGGVAoAGzicm/58L+IsF0Gk6O1yqcllR6ei/J931VP7chDAlWHOe64MgzbyQhNO6fw3ZnYtBuWrFSpjrpoIVcJYRZLqqaXOvq1mLoQ/Oz1LFIs9YzAoF3f63GhT9ulka+kn2GcS+05yv7KsH0BMsF2PhY9Sx47epa37dMCjF64rJfFdRRshJZDo+N3TCHWijb3RlnyvFjBMuaujriekXsj978RfjQvi9urRKWlXJhxQeXaTi8tiDqICqxPZsArU2Kd3hR7E8fkPRIAi8zSzaBTgR2NFkOQLpcRwZfKbKwvarexMoRUIxE7lAETR8iJJqSBDRLOfB+pZ6Jmzl7DaZdr5yVxA4z3VJPk1HYhwWBg7tDj05tnHE4x0iwUqckyzw6a+05ZGC6badEJ7wV1u9k7bqGKDIRg/axmeVzmkVbVnxAn+f8XlqjFoFvltsTjvGa/0iFcpzyflRDOQxJ34KgLEf9zDKO2EL6gFqMt1k94XKpH8WhtWdQUlMmvxlqbB1UCgYfoipqn+CXd8TXvD777qCw9FJRIKJAS0=
     on:
       tags: true
-    distributions: "bdist_wheel"
+    distributions: bdist_wheel
