@@ -13,18 +13,37 @@ matrix:
   - os: windows
   include:
   - python: 3.5
-    env: DISTRIB="ubuntu"
+    env: CUDA_VERSION=9.2
     before_install:
     - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
   - python: 3.6
+    env: CUDA_VERSION=9.2
     before_install:
     - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
   - python: 3.7
+    env: CUDA_VERSION=9.2
     before_install:
     - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
   - python: 3.8
+    env: CUDA_VERSION=9.2
     before_install:
     - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+  - python: 3.5
+    env: CUDA_VERSION=10.1
+    before_install:
+    - sudo apt-get install -y ninja-build build-essential 
+  - python: 3.6
+    env: CUDA_VERSION=10.1
+    before_install:
+    - sudo apt-get install -y ninja-build build-essential 
+  - python: 3.7
+    env: CUDA_VERSION=10.1
+    before_install:
+    - sudo apt-get install -y ninja-build build-essential 
+  - python: 3.8
+    env: CUDA_VERSION=10.1
+    before_install:
+    - sudo apt-get install -y ninja-build build-essential 
   - name: Python 3.7.2 on macOS
     os: osx
     osx_image: xcode11
@@ -46,6 +65,7 @@ matrix:
     env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 install:
 - source tests/travis_install.sh
+- apt instal rename
 - pip3 install torch
 - pip3 install -e .
 - pip3 install torch || echo "failed to install machine learning stuff"
@@ -54,6 +74,8 @@ before_script:
 - git config --global user.name "Stephan Seitz"
 script:
 - python setup.py bdist_wheel
+- rename "s/dist\/pyronn_torch-(.*)\.whl/dist\/pyronn_torch-cuda-$CUDA_VERSION-\$1\.whl/s" dist/pyronn_torch-*.whl
+ 
 after_success:
 - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; codecov; fi
 after_script:
