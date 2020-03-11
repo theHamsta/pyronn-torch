@@ -15,35 +15,35 @@ matrix:
   - python: 3.5
     env: CUDA_VERSION=9.2
     before_install:
-    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit rename
   - python: 3.6
     env: CUDA_VERSION=9.2
     before_install:
-    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit rename
   - python: 3.7
     env: CUDA_VERSION=9.2
     before_install:
-    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit rename
   - python: 3.8
     env: CUDA_VERSION=9.2
     before_install:
-    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit
+    - sudo apt-get install -y ninja-build build-essential nvidia-cuda-toolkit rename
   - python: 3.5
     env: CUDA_VERSION=10.1
     before_install:
-    - sudo apt-get install -y ninja-build build-essential 
+    - sudo apt-get install -y ninja-build build-essential rename
   - python: 3.6
     env: CUDA_VERSION=10.1
     before_install:
-    - sudo apt-get install -y ninja-build build-essential 
+    - sudo apt-get install -y ninja-build build-essential rename
   - python: 3.7
     env: CUDA_VERSION=10.1
     before_install:
-    - sudo apt-get install -y ninja-build build-essential 
+    - sudo apt-get install -y ninja-build build-essential rename
   - python: 3.8
     env: CUDA_VERSION=10.1
     before_install:
-    - sudo apt-get install -y ninja-build build-essential 
+    - sudo apt-get install -y ninja-build build-essential rename
   - name: Python 3.7.2 on macOS
     os: osx
     osx_image: xcode11
@@ -65,7 +65,6 @@ matrix:
     env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 install:
 - source tests/travis_install.sh
-- apt install rename
 - pip3 install torch
 - pip3 install -e .
 - pip3 install torch || echo "failed to install machine learning stuff"
