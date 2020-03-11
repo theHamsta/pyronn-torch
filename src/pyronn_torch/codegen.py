@@ -172,14 +172,15 @@ def generate_shared_object(output_folder=None,
                            source_files=None,
                            show_code=False,
                            framework_module_class=TorchModule,
-                           generate_code_only=False):
+                           generate_code_only=False,
+                           update_repo_files=False):
 
     object_cache = get_cache_config()['object_cache']
 
     module_name = 'pyronn_torch_cpp'
 
     if not output_folder:
-        output_folder = dirname(__file__)
+        output_folder = join(dirname(__file__), '..', '..', 'generated_files')
 
     if not source_files:
         source_files = glob(join(dirname(__file__), 'PYRO-NN-Layers', '*.cu.cc'))
@@ -189,11 +190,18 @@ def generate_shared_object(output_folder=None,
     rmtree(join(object_cache, module_name, 'helper_headers'), ignore_errors=True)
     copytree(join(dirname(__file__), 'PYRO-NN-Layers', 'helper_headers'),
              join(object_cache, module_name, 'helper_headers'))
+    if update_repo_files:
+        copytree(join(dirname(__file__), 'PYRO-NN-Layers', 'helper_headers'),
+                 join(output_folder, 'helper_headers'))
 
     for s in source_files:
         dst = join(object_cache, module_name, basename(s).replace('.cu.cc', '.cu'))
         copyfile(s, dst)  # Torch only accepts *.cu as CUDA
         cuda_sources.append(dst)
+        if update_repo_files:
+            dst = join(output_folder, basename(s).replace('.cu.cc', '.cu'))
+            copyfile(s, dst)  # Torch only accepts *.cu as CUDA
+
 
     module = framework_module_class(module_name, FUNCTIONS.values())
 
@@ -210,11 +218,13 @@ def generate_shared_object(output_folder=None,
 
     shared_object_file = module.compiled_file
     copyfile(shared_object_file, join(output_folder, module_name + '.so'))
-    if show_code:
+
+    if update_repo_files:
         with open(join(output_folder, 'pyronn_torch.cpp'), 'w') as f:
             f.write(pystencils.get_code_str(module, custom_backend=FrameworkIntegrationPrinter()))
 
     return extension
+
 
 
 def compile_shared_object(output_folder=None, source_files=None):
@@ -268,7 +278,7 @@ def main():
     parser.add_argument('--source-files',  default=None)
     args = parser.parse_args()
 
-    generate_shared_object(args.output_folder, args.source_files, show_code=True)
+    generate_shared_object(args.output_folder, args.source_files, show_code=True, update_repo_files=True)
     # compile_shared_object(args.output_folder, args.source_files)
 
 
