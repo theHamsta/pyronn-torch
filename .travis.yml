@@ -78,7 +78,7 @@ matrix:
     language: shell
     before_install:
     - choco install python
-    - choco install cuda
+    - choco install -y cuda --installargs '"nvcc_10.1 cuobjdump_10.1 nvprune_10.1 cupti_10.1 gpu_library_advisor_10.1 memcheck_10.1 nvdisasm_10.1 nvprof_10.1 cublas_10.1 cublas_dev_10.1 cudart_10.1 cufft_10.1 cufft_dev_10.1 curand_10.1 curand_dev_10.1 cusolver_10.1 cusolver_dev_10.1 cusparse_10.1 cusparse_dev_10.1 nvgraph_10.1 nvgraph_dev_10.1 npp_10.1 npp_dev_10.1 nvrtc_10.1 nvrtc_dev_10.1 nvml_dev_10.1"'
     env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 install:
 - source tests/travis_install.sh
