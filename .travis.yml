@@ -78,6 +78,7 @@ matrix:
     before_install:
     - choco install python
     - choco install pip
+    - choco install cuda
     env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 install:
 - source tests/travis_install.sh
