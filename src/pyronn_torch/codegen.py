@@ -154,10 +154,11 @@ try:
                                                    const float volume_origin_x, const float volume_origin_y,
                                                    const int detector_size, const float detector_spacing, const float detector_origin);
     """),  # noqa
-            }
+}
 except Exception as e:
     import warnings
     warnings.warn(str(e))
+    TorchModule = None
 
 
 def get_pyronn_cuda_kernels():
