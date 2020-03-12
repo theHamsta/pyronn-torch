@@ -110,10 +110,10 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-  - provider: pypi
-    user: __token__
-    password:
-      secure: ZWfigSArT7KLg2Y6HV/gYdplbcx3//yO/wGCJZYzF92gd44EvgY3B3JPmGfZqd/Wg9j3kxrKaH9CYkSJ+s7TT6v7X23fEUpna7YCXzpsSC3iWdKUAfxkQsH7PXWCEBoZ5qqzUQFvnGGVAoAGzicm/58L+IsF0Gk6O1yqcllR6ei/J931VP7chDAlWHOe64MgzbyQhNO6fw3ZnYtBuWrFSpjrpoIVcJYRZLqqaXOvq1mLoQ/Oz1LFIs9YzAoF3f63GhT9ulka+kn2GcS+05yv7KsH0BMsF2PhY9Sx47epa37dMCjF64rJfFdRRshJZDo+N3TCHWijb3RlnyvFjBMuaujriekXsj978RfjQvi9urRKWlXJhxQeXaTi8tiDqICqxPZsArU2Kd3hR7E8fkPRIAi8zSzaBTgR2NFkOQLpcRwZfKbKwvarexMoRUIxE7lAETR8iJJqSBDRLOfB+pZ6Jmzl7DaZdr5yVxA4z3VJPk1HYhwWBg7tDj05tnHE4x0iwUqckyzw6a+05ZGC6badEJ7wV1u9k7bqGKDIRg/axmeVzmkVbVnxAn+f8XlqjFoFvltsTjvGa/0iFcpzyflRDOQxJ34KgLEf9zDKO2EL6gFqMt1k94XKpH8WhtWdQUlMmvxlqbB1UCgYfoipqn+CXd8TXvD777qCw9FJRIKJAS0=
-    on:
-      tags: true
-    distributions: bdist_wheel
+  #- provider: pypi
+    #user: __token__
+    #password:
+      #secure: ZWfigSArT7KLg2Y6HV/gYdplbcx3//yO/wGCJZYzF92gd44EvgY3B3JPmGfZqd/Wg9j3kxrKaH9CYkSJ+s7TT6v7X23fEUpna7YCXzpsSC3iWdKUAfxkQsH7PXWCEBoZ5qqzUQFvnGGVAoAGzicm/58L+IsF0Gk6O1yqcllR6ei/J931VP7chDAlWHOe64MgzbyQhNO6fw3ZnYtBuWrFSpjrpoIVcJYRZLqqaXOvq1mLoQ/Oz1LFIs9YzAoF3f63GhT9ulka+kn2GcS+05yv7KsH0BMsF2PhY9Sx47epa37dMCjF64rJfFdRRshJZDo+N3TCHWijb3RlnyvFjBMuaujriekXsj978RfjQvi9urRKWlXJhxQeXaTi8tiDqICqxPZsArU2Kd3hR7E8fkPRIAi8zSzaBTgR2NFkOQLpcRwZfKbKwvarexMoRUIxE7lAETR8iJJqSBDRLOfB+pZ6Jmzl7DaZdr5yVxA4z3VJPk1HYhwWBg7tDj05tnHE4x0iwUqckyzw6a+05ZGC6badEJ7wV1u9k7bqGKDIRg/axmeVzmkVbVnxAn+f8XlqjFoFvltsTjvGa/0iFcpzyflRDOQxJ34KgLEf9zDKO2EL6gFqMt1k94XKpH8WhtWdQUlMmvxlqbB1UCgYfoipqn+CXd8TXvD777qCw9FJRIKJAS0=
+    #on:
+      #tags: true
+    #distributions: bdist_wheel
