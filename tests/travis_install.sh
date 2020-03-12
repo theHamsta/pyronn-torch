@@ -42,13 +42,13 @@ if [[ "$DISTRIB" == "conda" ]]; then
     shopt -s expand_aliases
 fi
 
-if [[ "$CUDA_VERSION" == "10.1" ]]; then
+if [[ "$CUDA_VERSION" != "9-2" ]]; then
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
 sudo mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
 sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
 sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/ /"
 sudo apt-get update
-sudo apt-get -y install cuda
+sudo apt-get -y install cuda-$CUDA_VERSION
 sudo ldconfig
 export CUDA_HOME=/usr/local/cuda
 export PATH=/usr/local/cuda/bin:$PATH
