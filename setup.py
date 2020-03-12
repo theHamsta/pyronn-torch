@@ -26,7 +26,7 @@ if __name__ == "__main__":
           ext_modules=[
               CUDAExtension(module_name,
                             [generated_file] + cuda_sources,
-                            extra_compile_args={'cxx': ['--std=c++14'],
+                            extra_compile_args={'cxx': [],
                                                 'nvcc': ['-arch=sm_35']})
           ],
           cmdclass={
