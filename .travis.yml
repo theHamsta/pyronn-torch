@@ -69,6 +69,7 @@ matrix:
     - brew install ninja
     - alias python=python3
     - alias pip="python3 -m pip"
+    - alias pip3="python3 -m pip"
     - shopt -s expand_aliases
     before_cache:
     - brew cleanup
@@ -77,7 +78,6 @@ matrix:
     language: shell
     before_install:
     - choco install python
-    - choco install pip
     - choco install cuda
     env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 install:
