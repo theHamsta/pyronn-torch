@@ -89,7 +89,7 @@ before_script:
 - git config --global user.name "Stephan Seitz"
 script:
 - python setup.py bdist_wheel
-- rename "s/dist\/pyronn_torch-(.*)\.whl/dist\/pyronn_torch-cuda-$CUDA_VERSION.\$1\.whl/s" dist/pyronn_torch-*.whl
+- rename "s/dist\/pyronn_torch-(.*)\.whl/dist\/cuda-$CUDA_VERSION-pyronn_torch-\$1\.whl/s" dist/pyronn_torch-*.whl
  
 after_success:
 - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; codecov; fi
