@@ -18,7 +18,7 @@ if __name__ == "__main__":
     object_cache = dirname(__file__)
     module_name = 'pyronn_torch_cpp'
 
-    cuda_sources = glob(join(dirname(__file__), 'generated_files', '*.cu'))
+    cuda_sources = glob(join('generated_files', '*.cu'))
 
     generated_file = join('generated_files', 'pyronn_torch.cpp')
 
