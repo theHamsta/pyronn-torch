@@ -225,15 +225,8 @@ void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const 
 {
     //COPY inv AR matrix to graphics card as float array
     auto matrices_size_b = number_of_projections * 9 * sizeof(float);
-    float *d_inv_AR_matrices;
-    gpuErrchk(cudaMalloc(&d_inv_AR_matrices, matrices_size_b));
-    gpuErrchk(cudaMemcpy(d_inv_AR_matrices, inv_AR_matrix, matrices_size_b, cudaMemcpyHostToDevice));
     //COPY source points to graphics card as float3
     auto src_points_size_b = number_of_projections * sizeof(float3);
-
-    float3 *d_src_points;
-    gpuErrchk(cudaMalloc(&d_src_points, src_points_size_b));
-    gpuErrchk(cudaMemcpy(d_src_points, src_points, src_points_size_b, cudaMemcpyHostToDevice));
 
     uint3 volume_size = make_uint3(volume_width, volume_height, volume_depth);
     float3 volume_spacing = make_float3(volume_spacing_x, volume_spacing_y, volume_spacing_z);
@@ -244,14 +237,12 @@ void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const 
     const dim3 blocksize = dim3( BLOCKSIZE_X, BLOCKSIZE_Y, 1 );
     const dim3 gridsize = dim3( detector_size.x / blocksize.x + 1, detector_size.y / blocksize.y + 1 , number_of_projections+1);
 
-    project_3Dcone_beam_kernel<<<gridsize, blocksize>>>(volume_ptr, out, d_inv_AR_matrices, d_src_points, step_size,
+    project_3Dcone_beam_kernel<<<gridsize, blocksize>>>(volume_ptr, out, inv_AR_matrix, reinterpret_cast<const float3*>(src_points), step_size,
                                         volume_size,volume_spacing, detector_size,number_of_projections,pointer_offsets);
 
     cudaDeviceSynchronize();
 
     // check for errors
     gpuErrchk( cudaPeekAtLastError() );
-    gpuErrchk(cudaFree(d_inv_AR_matrices));
-    gpuErrchk(cudaFree(d_src_points));
 }
 

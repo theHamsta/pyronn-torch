@@ -43,7 +43,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line,
   }
 }
 
-inline __device__ float3 map(float3 coordinates, float *d_projection_matrices,
+inline __device__ float3 map(float3 coordinates, const float *d_projection_matrices,
                              int n) {
   const float *matrix = &(d_projection_matrices[n * 12]);
 
@@ -99,7 +99,7 @@ inline __device__ float interp2D(const float *const_volume_ptr,
 }
 
 __global__ void backproject_3Dcone_beam_kernel(
-    const float *sinogram_ptr, float *vol, float *d_projection_matrices,
+    const float *sinogram_ptr, float *vol, const float *d_projection_matrices,
     const int number_of_projections, const uint3 volume_size,
     const float3 volume_spacing, const float3 volume_origin,
     const uint2 detector_size, const uint3 pointer_offsets,
@@ -144,10 +144,6 @@ void Cone_Backprojection3D_Kernel_Launcher(
     const float projection_multiplier) {
   // COPY matrix to graphics card as float array
   auto matrices_size_b = number_of_projections * 12 * sizeof(float);
-  float *d_projection_matrices;
-  gpuErrchk(cudaMalloc(&d_projection_matrices, matrices_size_b));
-  gpuErrchk(cudaMemcpy(d_projection_matrices, projection_matrices,
-                       matrices_size_b, cudaMemcpyHostToDevice));
 
   uint3 volume_size = make_uint3(volume_width, volume_height, volume_depth);
   float3 volume_spacing =
@@ -168,10 +164,9 @@ void Cone_Backprojection3D_Kernel_Launcher(
   const dim3 block = dim3(BLOCKSIZE_X, BLOCKSIZE_Y, BLOCKSIZE_Z);
 
   backproject_3Dcone_beam_kernel<<<grid, block>>>(
-      sinogram_ptr, out, d_projection_matrices, number_of_projections,
+      sinogram_ptr, out, projection_matrices, number_of_projections,
       volume_size, volume_spacing, volume_origin, detector_size,
       pointer_offsets, projection_multiplier);
 
   gpuErrchk(cudaUnbindTexture(sinogram_as_texture));
-  gpuErrchk(cudaFree(d_projection_matrices));
 }

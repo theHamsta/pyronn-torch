@@ -192,6 +192,7 @@ def generate_shared_object(output_folder=None,
     copytree(join(dirname(__file__), 'PYRO-NN-Layers', 'helper_headers'),
              join(object_cache, module_name, 'helper_headers'))
     if update_repo_files:
+        rmtree(join(output_folder, 'helper_headers'), ignore_errors=True)
         copytree(join(dirname(__file__), 'PYRO-NN-Layers', 'helper_headers'),
                  join(output_folder, 'helper_headers'))
 
