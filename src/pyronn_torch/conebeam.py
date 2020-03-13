@@ -7,8 +7,8 @@
 
 """
 import numpy as np
-import sympy as sp
 import torch
+from scipy.linalg import null_space
 
 import pyronn_torch
 
@@ -159,13 +159,13 @@ class ConeBeamProjector:
 
         inv_spacing = np.array([1/s for s in reversed(self._volume_spacing)], np.float32)
 
-        camera_centers = map(lambda x: np.array(sp.Matrix(x).nullspace(), np.float32), self._projection_matrices_numpy)
+        camera_centers = np.array(list(map(lambda x: np.array(null_space(x), np.float32),
+                                  self._projection_matrices_numpy)))
 
-        source_points = map(lambda x: (x[0, :3] / x[0, 3] * inv_spacing - np.array(list(reversed(self._volume_origin)))
-                                       * inv_spacing).astype(np.float32), camera_centers)
+        source_points = (camera_centers[:,:3] / camera_centers[:, None, 3] * inv_spacing \
+                - np.array(list(reversed(self._volume_origin))) * inv_spacing).astype(np.float32)
 
-        inv_matrices = map(lambda x: (np.linalg.inv(x[:3, :3]) *
-                                      inv_spacing).astype(np.float32), self._projection_matrices_numpy)
+        inv_matrices = (np.linalg.inv(self._projection_matrices_numpy[:,:3, :3]) * inv_spacing).astype(np.float32)
 
         self._inverse_matrices = torch.stack(tuple(map(torch.from_numpy, inv_matrices))).cuda().contiguous()
         self._source_points = torch.stack(tuple(map(torch.from_numpy, source_points))).cuda().contiguous()
