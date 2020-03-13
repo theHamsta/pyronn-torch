@@ -1,9 +1,10 @@
 import sys
 from glob import glob
-from os.path import dirname, join
+from os.path import join
 
 from pkg_resources import VersionConflict, require
 from setuptools import setup
+
 from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 try:
@@ -15,7 +16,6 @@ except VersionConflict:
 
 if __name__ == "__main__":
 
-    object_cache = dirname(__file__)
     module_name = 'pyronn_torch_cpp'
 
     cuda_sources = glob(join('generated_files', '*.cu'))
