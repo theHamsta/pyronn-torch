@@ -202,7 +202,7 @@ __global__ void project_3Dcone_beam_kernel_tex_interp(
  *
  */
 void Cone_Projection_Kernel_Tex_Interp_Launcher(
-    const float *__restrict__ volume_ptr, float *out,
+    const float * volume_ptr, float *out,
     const float *inv_AR_matrix, const float *src_points,
     const int number_of_projections, const int volume_width,
     const int volume_height, const int volume_depth,
