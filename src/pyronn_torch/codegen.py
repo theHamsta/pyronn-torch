@@ -53,11 +53,11 @@ try:
                                                  TypedSymbol('projection_multiplier',
                                                              create_type('float32'), const=True), backend='gpucuda',
                                                  fields_accessed=[volume, projection, projection_matrices], custom_signature="""
-    void Cone_Backprojection3D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *projection_matrices, const int number_of_projections,
-                                              const int volume_width, const int volume_height, const int volume_depth,
-                                              const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
-                                              const float volume_origin_x, const float volume_origin_y, const float volume_origin_z,
-                                              const int detector_width, const int detector_height, const float projection_multiplier);
+void Cone_Backprojection3D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *projection_matrices, const int number_of_projections,
+                                          const int volume_width, const int volume_height, const int volume_depth,
+                                          const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
+                                          const float volume_origin_x, const float volume_origin_y, const float volume_origin_z,
+                                          const int detector_width, const int detector_height, const float projection_multiplier);
     """),  # noqa
     'Cone_Projection_Kernel_Launcher': CustomFunctionCall('Cone_Projection_Kernel_Launcher',
                                                  FieldPointerSymbol(volume.name, volume.dtype, const=True),
@@ -76,10 +76,10 @@ try:
                                                  backend='gpucuda',
                                                  fields_accessed=[volume, projection, inv_matrices, source_points],
                                                  custom_signature="""
-    void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const float *inv_AR_matrix, const float *src_points, 
-                                        const int number_of_projections, const int volume_width, const int volume_height, const int volume_depth, 
-                                        const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
-                                        const int detector_width, const int detector_height, const float step_size);
+void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const float *inv_AR_matrix, const float *src_points, 
+                                    const int number_of_projections, const int volume_width, const int volume_height, const int volume_depth, 
+                                    const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
+                                    const int detector_width, const int detector_height, const float step_size);
     """),  # noqa
     'Cone_Projection_Kernel_Tex_Interp_Launcher': CustomFunctionCall('Cone_Projection_Kernel_Tex_Interp_Launcher',
                                                  FieldPointerSymbol(volume.name, volume.dtype, const=True),
@@ -98,14 +98,14 @@ try:
                                                  backend='gpucuda',
                                                  fields_accessed=[volume, projection, inv_matrices, source_points],
                                                  custom_signature="""
-    void Cone_Projection_Kernel_Tex_Interp_Launcher(
-        const float *volume_ptr, float *out,
-        const float *inv_AR_matrix, const float *src_points,
-        const int number_of_projections, const int volume_width,
-        const int volume_height, const int volume_depth,
-        const float volume_spacing_x, const float volume_spacing_y,
-        const float volume_spacing_z, const int detector_width,
-        const int detector_height, const float step_size);
+void Cone_Projection_Kernel_Tex_Interp_Launcher(
+    const float *volume_ptr, float *out,
+    const float *inv_AR_matrix, const float *src_points,
+    const int number_of_projections, const int volume_width,
+    const int volume_height, const int volume_depth,
+    const float volume_spacing_x, const float volume_spacing_y,
+    const float volume_spacing_z, const int detector_width,
+    const int detector_height, const float step_size);
     """),  # noqa
     'Parallel_Projection2D_Kernel_Launcher': CustomFunctionCall('Parallel_Projection2D_Kernel_Launcher',
                                                  FieldPointerSymbol(volume_slice.name, volume_slice.dtype, const=True),
@@ -124,13 +124,13 @@ try:
                                                  TypedSymbol('detector_origin', create_type('float32'), const=True),
                                                  backend='gpucuda',
                                                  fields_accessed=[volume_slice, projections_1d, ray_vectors], custom_signature="""
-    void Parallel_Projection2D_Kernel_Launcher(
-        const float *volume_ptr, float *out, const float *ray_vectors,
-        const int number_of_projections, const int volume_width,
-        const int volume_height, const float volume_spacing_x,
-        const float volume_spacing_y, const float volume_origin_x,
-        const float volume_origin_y, const int detector_size,
-        const float detector_spacing, const float detector_origin);
+void Parallel_Projection2D_Kernel_Launcher(
+    const float *volume_ptr, float *out, const float *ray_vectors,
+    const int number_of_projections, const int volume_width,
+    const int volume_height, const float volume_spacing_x,
+    const float volume_spacing_y, const float volume_origin_x,
+    const float volume_origin_y, const int detector_size,
+    const float detector_spacing, const float detector_origin);
     """),  # noqa
     'Parallel_Backprojection2D_Kernel_Launcher': CustomFunctionCall('Parallel_Backprojection2D_Kernel_Launcher',
                                                  FieldPointerSymbol(projections_1d.name,
@@ -149,10 +149,10 @@ try:
                                                  TypedSymbol('detector_origin', create_type('float32'), const=True),
                                                  backend='gpucuda',
                                                  fields_accessed=[volume_slice, projections_1d, ray_vectors], custom_signature="""
-    void Parallel_Backprojection2D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *ray_vectors, const int number_of_projections,
-                                                   const int volume_width, const int volume_height, const float volume_spacing_x, const float volume_spacing_y,
-                                                   const float volume_origin_x, const float volume_origin_y,
-                                                   const int detector_size, const float detector_spacing, const float detector_origin);
+void Parallel_Backprojection2D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *ray_vectors, const int number_of_projections,
+                                               const int volume_width, const int volume_height, const float volume_spacing_x, const float volume_spacing_y,
+                                               const float volume_origin_x, const float volume_origin_y,
+                                               const int detector_size, const float detector_spacing, const float detector_origin);
     """),  # noqa
 }
 except Exception as e:

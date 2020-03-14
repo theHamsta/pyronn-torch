@@ -1,9 +1,8 @@
+#ifdef _MSC_BUILD
+#define RESTRICT __restrict
+#else
 #define RESTRICT __restrict__
-
-//#if GOOGLE_CUDA
-//#define EIGEN_USE_GPU
-//#include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
-//#endif
+#endif
 
 #include <ATen/ATen.h>
 #include <pybind11/pybind11.h>
@@ -11,42 +10,42 @@
 #include <torch/extension.h>
 
 
-    void Cone_Backprojection3D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *projection_matrices, const int number_of_projections,
-                                              const int volume_width, const int volume_height, const int volume_depth,
-                                              const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
-                                              const float volume_origin_x, const float volume_origin_y, const float volume_origin_z,
-                                              const int detector_width, const int detector_height, const float projection_multiplier);
+void Cone_Backprojection3D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *projection_matrices, const int number_of_projections,
+                                          const int volume_width, const int volume_height, const int volume_depth,
+                                          const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
+                                          const float volume_origin_x, const float volume_origin_y, const float volume_origin_z,
+                                          const int detector_width, const int detector_height, const float projection_multiplier);
     
 
-    void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const float *inv_AR_matrix, const float *src_points, 
-                                        const int number_of_projections, const int volume_width, const int volume_height, const int volume_depth, 
-                                        const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
-                                        const int detector_width, const int detector_height, const float step_size);
+void Cone_Projection_Kernel_Launcher(const float* volume_ptr, float *out, const float *inv_AR_matrix, const float *src_points, 
+                                    const int number_of_projections, const int volume_width, const int volume_height, const int volume_depth, 
+                                    const float volume_spacing_x, const float volume_spacing_y, const float volume_spacing_z,
+                                    const int detector_width, const int detector_height, const float step_size);
     
 
-    void Cone_Projection_Kernel_Tex_Interp_Launcher(
-        const float *__restrict__ volume_ptr, float *out,
-        const float *inv_AR_matrix, const float *src_points,
-        const int number_of_projections, const int volume_width,
-        const int volume_height, const int volume_depth,
-        const float volume_spacing_x, const float volume_spacing_y,
-        const float volume_spacing_z, const int detector_width,
-        const int detector_height, const float step_size);
+void Cone_Projection_Kernel_Tex_Interp_Launcher(
+    const float *volume_ptr, float *out,
+    const float *inv_AR_matrix, const float *src_points,
+    const int number_of_projections, const int volume_width,
+    const int volume_height, const int volume_depth,
+    const float volume_spacing_x, const float volume_spacing_y,
+    const float volume_spacing_z, const int detector_width,
+    const int detector_height, const float step_size);
     
 
-    void Parallel_Backprojection2D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *ray_vectors, const int number_of_projections,
-                                                   const int volume_width, const int volume_height, const float volume_spacing_x, const float volume_spacing_y,
-                                                   const float volume_origin_x, const float volume_origin_y,
-                                                   const int detector_size, const float detector_spacing, const float detector_origin);
+void Parallel_Backprojection2D_Kernel_Launcher(const float *sinogram_ptr, float *out, const float *ray_vectors, const int number_of_projections,
+                                               const int volume_width, const int volume_height, const float volume_spacing_x, const float volume_spacing_y,
+                                               const float volume_origin_x, const float volume_origin_y,
+                                               const int detector_size, const float detector_spacing, const float detector_origin);
     
 
-    void Parallel_Projection2D_Kernel_Launcher(
-        const float *volume_ptr, float *out, const float *ray_vectors,
-        const int number_of_projections, const int volume_width,
-        const int volume_height, const float volume_spacing_x,
-        const float volume_spacing_y, const float volume_origin_x,
-        const float volume_origin_y, const int detector_size,
-        const float detector_spacing, const float detector_origin);
+void Parallel_Projection2D_Kernel_Launcher(
+    const float *volume_ptr, float *out, const float *ray_vectors,
+    const int number_of_projections, const int volume_width,
+    const int volume_height, const float volume_spacing_x,
+    const float volume_spacing_y, const float volume_origin_x,
+    const float volume_origin_y, const int detector_size,
+    const float detector_spacing, const float detector_origin);
     
 using namespace pybind11::literals;
 
