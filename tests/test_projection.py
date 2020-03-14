@@ -88,9 +88,11 @@ def test_projection_backward(with_texture, with_backward):
         loss.backward()
 
 
-@pytest.mark.skipif('CI' in os.environ, reason="No conrad config on CI")
 @pytest.mark.parametrize('with_backward', ('with_backward', False))
 def test_conrad_config(with_backward, with_texture=True):
+    import pytest
+    pytest.importorskip("pyconrad")
+
     projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
 
     volume = projector.new_volume_tensor(requires_grad=True if with_backward else False)
