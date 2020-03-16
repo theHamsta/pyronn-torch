@@ -10,7 +10,7 @@ pyronn-torch
 ============
 
 This repository provides PyTorch bindings for `PYRO-NN <https://github.com/csyben/PYRO-NN>`_,
-a collection of back-rotatable projectors for CT reconstruction.
+a collection of back-propagatable projectors for CT reconstruction.
 
 Feel free to cite our publication:
 
