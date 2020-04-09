@@ -6,7 +6,6 @@
 """
 
 """
-import os
 
 import numpy as np
 import pytest
@@ -73,11 +72,14 @@ def test_projection_backward(with_texture, with_backward):
                    [-9.99847710e-01, -1.74524058e-2,  0.00000000e+0,
                     6.00000000e+2]]])
     )
-
     projection = projector.new_projection_tensor(requires_grad=True if with_backward else False)
 
     projection += 1.
+
     result = projector.project_backward(projection, use_texture=with_texture)
+    import pyconrad.autoinit
+    pyconrad.imshow(result)
+    assert result.shape == projector._volume_shape
 
     assert result is not None
     if with_backward:
@@ -99,6 +101,8 @@ def test_conrad_config(with_backward, with_texture=True):
 
     volume += 1.
     result = projector.project_forward(volume, use_texture=with_texture)
+    import pyconrad.autoinit
+    pyconrad.imshow(result)
 
     assert result is not None
     if with_backward:
@@ -107,3 +111,49 @@ def test_conrad_config(with_backward, with_texture=True):
 
         loss = result.mean()
         loss.backward()
+
+
+def test_projection_backward_conrad(with_texture=True, with_backward=True):
+    import pytest
+    pytest.importorskip("pyconrad")
+
+    projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
+
+    projection = projector.new_projection_tensor(requires_grad=True if with_backward else False)
+
+    projection += 1000.
+
+    result = projector.project_backward(projection, use_texture=with_texture)
+    import pyconrad.autoinit
+    pyconrad.imshow(result)
+    assert result.shape == projector._volume_shape
+
+    assert result is not None
+    if with_backward:
+        assert projection.requires_grad
+        assert result.requires_grad
+
+        loss = result.mean()
+        loss.backward()
+
+
+def test_conrad_forward_backward():
+    import pytest
+    pytest.importorskip("pyconrad")
+
+    projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
+
+    volume = projector.new_volume_tensor()
+
+    volume += 1.
+    result = projector.project_forward(volume)
+
+    reco = projector.project_backward(result)
+    import pyconrad.autoinit
+    pyconrad.imshow(reco)
+
+    assert result is not None
+    assert reco is not None
+
+    while True:
+        pass
