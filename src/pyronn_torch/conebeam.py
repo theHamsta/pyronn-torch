@@ -163,7 +163,7 @@ class ConeBeamProjector:
             tuple(map(torch.from_numpy, inv_matrices))).cuda().contiguous()
         self._source_points = torch.stack(
             tuple(map(torch.from_numpy, source_points))).cuda().contiguous()
-        self._projection_multiplier = 1.
+        self._projection_multiplier = 1. / self._projection_matrices.shape[0]
 
     @property
     def projection_matrices(self):
