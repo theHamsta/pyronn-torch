@@ -77,8 +77,6 @@ def test_projection_backward(with_texture, with_backward):
     projection += 1.
 
     result = projector.project_backward(projection, use_texture=with_texture)
-    import pyconrad.autoinit
-    pyconrad.imshow(result)
     assert result.shape == projector._volume_shape
 
     assert result is not None
