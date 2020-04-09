@@ -36,7 +36,7 @@ class _ForwardProjection(torch.autograd.Function):
         self.step_size = step_size
 
     def forward(self, volume):
-        volume = volume.cuda().contiguous()
+        volume = volume.float().cuda().contiguous()
         projection = torch.zeros(self.projection_shape,
                                  device='cuda',
                                  requires_grad=volume.requires_grad)
@@ -55,6 +55,7 @@ class _ForwardProjection(torch.autograd.Function):
 
     def backward(self, *projection_grad):
         projection_grad = projection_grad[0]
+        projection_grad = projection_grad.float().cuda().contiguous()
         volume_grad = torch.zeros(self.volume_shape, device='cuda', requires_grad=projection_grad.requires_grad)
 
         assert pyronn_torch.cpp_extension
