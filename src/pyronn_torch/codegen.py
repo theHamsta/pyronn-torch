@@ -204,7 +204,6 @@ def generate_shared_object(output_folder=None,
             dst = join(output_folder, basename(s).replace('.cu.cc', '.cu'))
             copyfile(s, dst)  # Torch only accepts *.cu as CUDA
 
-
     module = framework_module_class(module_name, FUNCTIONS.values())
 
     if show_code:
@@ -226,7 +225,6 @@ def generate_shared_object(output_folder=None,
             f.write(pystencils.get_code_str(module, custom_backend=FrameworkIntegrationPrinter()))
 
     return extension
-
 
 
 def compile_shared_object(output_folder=None, source_files=None):
