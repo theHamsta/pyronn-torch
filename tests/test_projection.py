@@ -149,9 +149,6 @@ def test_conrad_forward_backward():
     assert reco is not None
 
 
-test_conrad_forward_backward()
-
-
 def test_register_hook():
 
     was_executed = False
