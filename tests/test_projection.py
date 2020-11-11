@@ -136,6 +136,8 @@ def test_conrad_forward_backward():
 
     volume += 1.
     result = projector.project_forward(volume)
+    import pyconrad.autoinit
+    pyconrad.imshow(result)
 
     reco = projector.project_backward(result)
     import pyconrad.autoinit

@@ -6,10 +6,10 @@
 
 """
 import numpy as np
+import sympy as sp
 import torch
 
 import pyronn_torch
-import sympy as sp
 
 
 class State:
@@ -53,12 +53,18 @@ class _ForwardProjection(torch.autograd.Function):
         assert pyronn_torch.cpp_extension
         if state.with_texture:
             pyronn_torch.cpp_extension.call_Cone_Projection_Kernel_Tex_Interp_Launcher(
-                state.inverse_matrices, projection, state.source_points,
-                state.step_size, volume, *state.volume_spacing)
+                inv_matrices=state.inverse_matrices,
+                projection=projection,
+                source_points=state.source_points,
+                step_size=state.step_size,
+                volume=volume,
+                volume_spacing_x=state.volume_spacing[2],
+                volume_spacing_y=state.volume_spacing[1],
+                volume_spacing_z=state.volume_spacing[0])
         else:
             pyronn_torch.cpp_extension.call_Cone_Projection_Kernel_Launcher(
-                state.inverse_matrices, projection, state.source_points,
-                state.step_size, volume, *state.volume_spacing)
+                inv_matrices=state.inverse_matrices, projection=projection, source_points=state.source_points,
+                step_size=state.step_size, volume=volume, *state.volume_spacing)
 
         self.state = state
         if return_none:
@@ -144,11 +150,16 @@ class ConeBeamProjector:
     def project_forward(self, volume, step_size=1., use_texture=True):
         return _ForwardProjection().apply(
             volume,
-            State(self._projection_shape, self._volume_shape,
-                  self._source_points, self._inverse_matrices,
-                  self._projection_matrices, self._volume_origin,
-                  self._volume_spacing, self._projection_multiplier, step_size,
-                  use_texture))[0]
+            State(projection_shape=self._projection_shape,
+                  volume_shape=self._volume_shape,
+                  source_points=self._source_points,
+                  inverse_matrices=self._inverse_matrices,
+                  projection_matrices=self._projection_matrices,
+                  volume_origin=self._volume_origin,
+                  volume_spacing=self._volume_spacing,
+                  projection_multiplier=self._projection_multiplier,
+                  step_size=step_size,
+                  with_texture=use_texture))[0]
 
     def project_backward(self,
                          projection_stack,
@@ -156,11 +167,16 @@ class ConeBeamProjector:
                          use_texture=True):
         return _BackwardProjection().apply(
             projection_stack,
-            State(self._projection_shape, self._volume_shape,
-                  self._source_points, self._inverse_matrices,
-                  self._projection_matrices, self._volume_origin,
-                  self._volume_spacing, self._projection_multiplier, step_size,
-                  use_texture))[0]
+            State(projection_shape=self._projection_shape,
+                  volume_shape=self._volume_shape,
+                  source_points=self._source_points,
+                  inverse_matrices=self._inverse_matrices,
+                  projection_matrices=self._projection_matrices,
+                  volume_origin=self._volume_origin,
+                  volume_spacing=self._volume_spacing,
+                  projection_multiplier=self._projection_multiplier,
+                  step_size=step_size,
+                  with_texture=use_texture))[0]
 
     def _calc_inverse_matrices(self):
         if self._projection_matrices_numpy is None:
