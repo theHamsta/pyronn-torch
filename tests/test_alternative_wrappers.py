@@ -10,6 +10,8 @@ But rather for wrapping PYRO-NN for other frameworks.
 
 import tempfile
 
+import pytest
+
 from pyronn_torch.codegen import generate_shared_object
 
 
@@ -23,7 +25,6 @@ def test_wrap_walberla():
                            framework_module_class=WalberlaModule, generate_code_only=True)
 
 
-import pytest
 @pytest.mark.xfail(reason="allow failure", strict=False)
 def test_wrap_tensorflow():
     import pytest
