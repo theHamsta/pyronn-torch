@@ -131,23 +131,25 @@ def test_conrad_forward_backward():
     pytest.importorskip("pyconrad")
 
     projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
+    # import conebeam_projector
+    # other_projector = conebeam_projector.CudaProjector()
 
     volume = projector.new_volume_tensor()
 
     volume += 1.
-    result = projector.project_forward(volume)
-    import pyconrad.autoinit
-    pyconrad.imshow(result)
+    result = projector.project_forward(volume, use_texture=False)
+    # import pyconrad.autoinit
+    # pyconrad.imshow(result)
 
-    reco = projector.project_backward(result)
-    import pyconrad.autoinit
-    pyconrad.imshow(reco)
+    reco = projector.project_backward(result, use_texture=False)
+    # import pyconrad.autoinit
+    # pyconrad.imshow(reco)
 
     assert result is not None
     assert reco is not None
 
-    while True:
-        pass
+
+test_conrad_forward_backward()
 
 
 def test_register_hook():

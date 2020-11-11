@@ -58,13 +58,19 @@ class _ForwardProjection(torch.autograd.Function):
                 source_points=state.source_points,
                 step_size=state.step_size,
                 volume=volume,
-                volume_spacing_x=state.volume_spacing[2],
+                volume_spacing_x=state.volume_spacing[0],
                 volume_spacing_y=state.volume_spacing[1],
-                volume_spacing_z=state.volume_spacing[0])
+                volume_spacing_z=state.volume_spacing[2])
         else:
             pyronn_torch.cpp_extension.call_Cone_Projection_Kernel_Launcher(
-                inv_matrices=state.inverse_matrices, projection=projection, source_points=state.source_points,
-                step_size=state.step_size, volume=volume, *state.volume_spacing)
+                inv_matrices=state.inverse_matrices,
+                projection=projection,
+                source_points=state.source_points,
+                step_size=state.step_size,
+                volume=volume,
+                volume_spacing_x=state.volume_spacing[0],
+                volume_spacing_y=state.volume_spacing[1],
+                volume_spacing_z=state.volume_spacing[2])
 
         self.state = state
         if return_none:
@@ -125,18 +131,22 @@ class ConeBeamProjector:
         volume_origin = pyconrad.config.get_reco_origin()
         projection_shape = pyconrad.config.get_sino_shape()
         projection_spacing = [
+            pyconrad.config.get_geometry().getPixelDimensionX(),
             pyconrad.config.get_geometry().getPixelDimensionY(),
-            pyconrad.config.get_geometry().getPixelDimensionX()
         ]
         projection_origin = [
+            pyconrad.config.get_geometry().getDetectorOffsetU(),
             pyconrad.config.get_geometry().getDetectorOffsetV(),
-            pyconrad.config.get_geometry().getDetectorOffsetU()
         ]
         projection_matrices = pyconrad.config.get_projection_matrices()
 
-        obj = cls(volume_shape, volume_spacing, volume_origin,
-                  projection_shape, projection_spacing, projection_origin,
-                  projection_matrices)
+        obj = cls(volume_shape=volume_shape,
+                  volume_spacing=volume_spacing,
+                  volume_origin=volume_origin,
+                  projection_shape=projection_shape,
+                  projection_spacing=projection_spacing,
+                  projection_origin=projection_origin,
+                  projection_matrices=projection_matrices)
         return obj
 
     def new_volume_tensor(self, requires_grad=False):
@@ -186,22 +196,22 @@ class ConeBeamProjector:
                 torch.from_numpy(p.astype(np.float32))
                 for p in self._projection_matrices_numpy)).cuda().contiguous()
 
-        inv_spacing = np.array([1 / s for s in reversed(self._volume_spacing)],
+        inv_spacing = np.array([1 / s for s in self._volume_spacing],
                                np.float32)
 
-        camera_centers = map(
+        camera_centers = list(map(
             lambda x: np.array(sp.Matrix(x).nullspace(), np.float32),
-            self._projection_matrices_numpy)
+            self._projection_matrices_numpy))
 
-        source_points = map(
-            lambda x: (x[0, :3] / x[0, 3] * inv_spacing - np.array(
-                list(reversed(self._volume_origin))) * inv_spacing).astype(
-                    np.float32), camera_centers)
+        source_points = list(map(
+            lambda x: (-x[0, :3, 0] / x[0, 3, 0] * inv_spacing
+                       - np.array(list(self._volume_origin)) * inv_spacing).astype(np.float32), camera_centers))
 
-        inv_matrices = map(
+        scaling_matrix = np.array([[inv_spacing[0], 0, 0], [0, inv_spacing[1], 0], [0, 0, inv_spacing[2]]])
+        inv_matrices = list(map(
             lambda x:
-            (np.linalg.inv(x[:3, :3]) * inv_spacing).astype(np.float32),
-            self._projection_matrices_numpy)
+            (scaling_matrix @ np.linalg.inv(x[:3, :3])).astype(np.float32),
+            self._projection_matrices_numpy))
 
         self._inverse_matrices = torch.stack(
             tuple(map(torch.from_numpy, inv_matrices))).float().cuda().contiguous()
