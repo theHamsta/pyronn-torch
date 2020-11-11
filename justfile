@@ -4,11 +4,11 @@ test:
     pytest
 
 release version: test
-    git tag {{version}}
+    git tag -f {{version}}
     git checkout {{version}}
     python3 setup.py sdist
     twine upload dist/pyronn-torch-{{version}}.tar.gz
-    git push --tags
+    git push --tags -f
     git checkout master
     
 wheel_release version: test
