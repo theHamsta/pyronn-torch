@@ -48,7 +48,7 @@ class _ForwardProjection(torch.autograd.Function):
         volume = volume.float().cuda().contiguous()
         projection = torch.zeros(state.projection_shape,
                                  device='cuda',
-                                 requires_grad=volume.requires_grad)
+                                 requires_grad=volume.requires_grad).float().contiguous()
 
         assert pyronn_torch.cpp_extension
         if state.with_texture:
@@ -188,9 +188,9 @@ class ConeBeamProjector:
             self._projection_matrices_numpy)
 
         self._inverse_matrices = torch.stack(
-            tuple(map(torch.from_numpy, inv_matrices))).cuda().contiguous()
+            tuple(map(torch.from_numpy, inv_matrices))).float().cuda().contiguous()
         self._source_points = torch.stack(
-            tuple(map(torch.from_numpy, source_points))).cuda().contiguous()
+            tuple(map(torch.from_numpy, source_points))).float().cuda().contiguous()
         self._projection_multiplier = 1. / self._projection_matrices.shape[0]
 
     @property
