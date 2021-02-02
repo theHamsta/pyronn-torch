@@ -204,7 +204,7 @@ class ConeBeamProjector:
             self._projection_matrices_numpy))
 
         source_points = list(map(
-            lambda x: (-x[0, :3, 0] / x[0, 3, 0] * inv_spacing
+            lambda x: (x[0, :3, 0] / x[0, 3, 0] * inv_spacing
                        - np.array(list(self._volume_origin)) * inv_spacing).astype(np.float32), camera_centers))
 
         scaling_matrix = np.array([[inv_spacing[0], 0, 0], [0, inv_spacing[1], 0], [0, 0, inv_spacing[2]]])
