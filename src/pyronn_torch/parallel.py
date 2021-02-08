@@ -134,6 +134,8 @@ class ParallelProjector:
     def project_backward(self, projection):
         projection = projection.float().contiguous().cuda()
 
+        if len(projection.shape) == 2:
+            projection = projection[None, ...]
         if len(projection.shape) != 3:
             raise ValueError('3D input expected! [batch, number_of_views, image_dim]')
 

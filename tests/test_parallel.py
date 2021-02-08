@@ -29,6 +29,19 @@ def test_parallel():
     pyconrad.imshow(reco)
 
 
+def test_parallel_other_direction():
+    angles = torch.linspace(0, 360)
+    volume_shape = [255, 255]
+    sino = torch.randn(len(angles), volume_shape[2])
+    projector = ParallelProjector(volume_shape=volume_shape)
+
+    vol = projector.project_backward(sino)
+    reco = projector.project_forward(vol)
+
+    pyconrad.imshow(reco)
+    pyconrad.imshow(sino)
+
+
 def test_parallel_grad():
     vol = torch.randn(200, 1, 256, 256, requires_grad=True)
     projector = ParallelProjector(volume_shape=vol.shape[-2:])
