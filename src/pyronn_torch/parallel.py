@@ -91,7 +91,7 @@ class _BackwardProjection(torch.autograd.Function):
 
 class ParallelProjector:
 
-    def __init__(self, detector_origin=-128, detector_spacing=1, angles=torch.linspace(0, 360, 360),
+    def __init__(self, detector_origin=-128, detector_spacing=1, angles=torch.linspace(0, 360, 360 - 1),
                  volume_origin=None, volume_shape=[256, 256], volume_spacing=[1, 1]):
         self._volume_shape = volume_shape
         self._volume_origin = volume_origin or [-v/2 for v in reversed(volume_shape)]

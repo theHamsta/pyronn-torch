@@ -30,7 +30,7 @@ def test_parallel():
 
 
 def test_parallel_other_direction():
-    angles = torch.linspace(0, 360)
+    angles = torch.linspace(0, 360, 360 - 1)
     volume_shape = [255, 255]
     sino = torch.randn(len(angles), volume_shape[2])
     projector = ParallelProjector(volume_shape=volume_shape)
