@@ -6,9 +6,8 @@
 
 """
 import numpy as np
-import torch
-
 import pyronn_torch
+import torch
 
 
 class State:
@@ -119,6 +118,7 @@ class ParallelProjector:
         projs = torch.zeros(volume.shape[0],
                             self._projection_shape[0],
                             self._projection_shape[1], device='cuda')
+
         for i, slice in enumerate(volume):
             projs[i] = _ForwardProjection().apply(slice[0], State(
                 self._detector_origin,
@@ -139,8 +139,11 @@ class ParallelProjector:
         if len(projection.shape) != 3:
             raise ValueError('3D input expected! [batch, number_of_views, image_dim]')
 
-        volume = torch.zeros(projection.shape[0], 1, self._volume_shape[0],
+        volume = torch.zeros(projection.shape[0],
+                             1,
+                             self._volume_shape[0],
                              self._volume_shape[1]).cuda()
+
         for i, proj in enumerate(projection):
             volume[i] = _BackwardProjection().apply(proj, State(
                 self._detector_origin,
