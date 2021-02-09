@@ -151,11 +151,13 @@ class ConeBeamProjector:
 
     def new_volume_tensor(self, requires_grad=False):
         return torch.zeros(self._volume_shape,
-                           requires_grad=requires_grad).cuda()
+                           requires_grad=requires_grad,
+                           device='cuda')
 
     def new_projection_tensor(self, requires_grad=False):
         return torch.zeros(self._projection_shape,
-                           requires_grad=requires_grad).cuda()
+                           requires_grad=requires_grad,
+                           device='cuda')
 
     def project_forward(self, volume, step_size=1., use_texture=True):
         return _ForwardProjection().apply(

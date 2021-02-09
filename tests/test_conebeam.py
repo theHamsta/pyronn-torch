@@ -34,7 +34,7 @@ def test_projection(with_texture, with_backward):
     volume = projector.new_volume_tensor(
         requires_grad=True if with_backward else False)
 
-    volume += 1.
+    volume = volume + 1.
     result = projector.project_forward(volume, use_texture=with_texture)
 
     assert result is not None
@@ -63,7 +63,7 @@ def test_projection_backward(with_texture, with_backward):
     projection = projector.new_projection_tensor(
         requires_grad=True if with_backward else False)
 
-    projection += 1.
+    projection = projection + 1.
 
     result = projector.project_backward(projection, use_texture=with_texture)
     assert result.shape == projector._volume_shape
@@ -87,7 +87,7 @@ def test_conrad_config(with_backward, with_texture=True):
     volume = projector.new_volume_tensor(
         requires_grad=True if with_backward else False)
 
-    volume += 1.
+    volume = volume + 1.
     result = projector.project_forward(volume, use_texture=with_texture)
     import pyconrad.autoinit
     pyconrad.imshow(result)
@@ -110,7 +110,7 @@ def test_projection_backward_conrad(with_texture=True, with_backward=True):
     projection = projector.new_projection_tensor(
         requires_grad=True if with_backward else False)
 
-    projection += 1000.
+    projection = projection + 1000.
 
     result = projector.project_backward(projection, use_texture=with_texture)
     import pyconrad.autoinit
@@ -136,7 +136,7 @@ def test_conrad_forward_backward():
 
     volume = projector.new_volume_tensor()
 
-    volume += 1.
+    volume = volume + 1.
     result = projector.project_forward(volume, use_texture=False)
     # import pyconrad.autoinit
     # pyconrad.imshow(result)
