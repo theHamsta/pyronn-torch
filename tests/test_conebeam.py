@@ -8,6 +8,7 @@
 
 import numpy as np
 import pytest
+import torch
 
 import pyronn_torch
 
@@ -147,6 +148,27 @@ def test_conrad_forward_backward():
 
     assert result is not None
     assert reco is not None
+
+
+def test_parallel_optimization():
+    projector = pyronn_torch.ConeBeamProjector.from_conrad_config()
+    vol = projector.new_volume_tensor(requires_grad=True)
+
+    optimizer = torch.optim.Adam([vol], lr=0.1)
+    vol = vol + 1
+    for i in range(10):
+        projection = projector.project_forward(vol)
+        loss = torch.abs(projection.mean())
+
+        optimizer.zero_grad()
+        loss.backward()
+        print(f"{loss=}")
+
+        optimizer.step()
+
+        # import pyconrad.autoinit
+        # pyconrad.imshow(projection)
+        # pyconrad.imshow(reco)
 
 
 def test_register_hook():

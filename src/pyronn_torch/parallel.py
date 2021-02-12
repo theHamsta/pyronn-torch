@@ -117,7 +117,8 @@ class ParallelProjector:
 
         projs = torch.zeros(volume.shape[0],
                             self._projection_shape[0],
-                            self._projection_shape[1], device='cuda')
+                            self._projection_shape[1], device='cuda',
+                            requires_grad=volume.requires_grad)
 
         for i, slice in enumerate(volume):
             projs[i] = _ForwardProjection().apply(slice[0], State(
@@ -142,7 +143,8 @@ class ParallelProjector:
         volume = torch.zeros(projection.shape[0],
                              1,
                              self._volume_shape[0],
-                             self._volume_shape[1]).cuda()
+                             self._volume_shape[1],
+                             requires_grad=projection.requires_grad).cuda()
 
         for i, proj in enumerate(projection):
             volume[i] = _BackwardProjection().apply(proj, State(

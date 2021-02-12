@@ -8,7 +8,6 @@
 """
 
 import torch
-
 from pyronn_torch.parallel import ParallelProjector
 
 try:
@@ -52,4 +51,23 @@ def test_parallel_grad():
 
     import pyconrad.autoinit
     pyconrad.imshow(projection)
-    pyconrad.imshow(reco)
+
+
+def test_parallel_optimization():
+    vol = torch.randn(200, 1, 256, 256, requires_grad=True)
+    projector = ParallelProjector(volume_shape=vol.shape[-2:])
+
+    optimizer = torch.optim.Adam([vol], lr=0.1)
+    for i in range(10):
+        projection = projector.project_forward(vol)
+        loss = torch.abs(projection.mean())
+
+        optimizer.zero_grad()
+        loss.backward
+        print(f"{loss=}")
+
+        optimizer.step()
+
+        # import pyconrad.autoinit
+        # pyconrad.imshow(projection)
+        # pyconrad.imshow(reco)
