@@ -50,6 +50,11 @@ You can build a binary wheel using
     python setup.py bdist_wheel
 
 
+**Important**
+
+If you're using an older CUDA version you might get an error about ``'-allow-unsupported-compiler'`` not being a
+valid compiler option. In that case remove that compiler option from this projection's ``setup.py``.
+
 Usage
 =====
 
