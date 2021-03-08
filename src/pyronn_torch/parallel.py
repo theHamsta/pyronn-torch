@@ -115,13 +115,9 @@ class ParallelProjector:
         elif volume.shape[1] != 1:
             raise ValueError('Only channel dimension of 1 is currently supported!')
 
-        projs = torch.zeros(volume.shape[0],
-                            self._projection_shape[0],
-                            self._projection_shape[1], device='cuda',
-                            requires_grad=volume.requires_grad)
-
+        projs = []
         for i, slice in enumerate(volume):
-            projs[i] = _ForwardProjection().apply(slice[0], State(
+            projs.append(_ForwardProjection().apply(slice[0], State(
                 self._detector_origin,
                 self._detector_spacing,
                 self._projection_shape,
@@ -129,8 +125,8 @@ class ParallelProjector:
                 self._volume_origin,
                 self._volume_shape,
                 self._volume_spacing
-            ))
-        return projs
+            )))
+        return torch.stack(projs, axis=0)
 
     def project_backward(self, projection):
         projection = projection.float().contiguous().cuda()
