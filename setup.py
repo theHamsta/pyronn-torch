@@ -2,8 +2,14 @@ import sys
 from glob import glob
 from os.path import join
 
-from pkg_resources import VersionConflict, require
+from pkg_resources import DistributionNotFound, VersionConflict, require
 from setuptools import setup
+
+try:
+    require('torch')
+except DistributionNotFound:
+    print("Error: Please install torch!")
+    sys.exit(1)
 
 from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
@@ -22,13 +28,25 @@ if __name__ == "__main__":
 
     generated_file = join('generated_files', 'pyronn_torch.cpp')
 
-    setup(use_pyscaffold=True,
-          ext_modules=[
-              CUDAExtension(module_name,
-                            [generated_file] + cuda_sources,
-                            extra_compile_args={'cxx': [],
-                                                'nvcc': ['-arch=sm_35', '-O3', '-allow-unsupported-compiler']})
-          ],
-          cmdclass={
-              'build_ext': BuildExtension
-          })
+    try:
+        setup(use_pyscaffold=True,
+              ext_modules=[
+                  CUDAExtension(module_name,
+                                [generated_file] + cuda_sources,
+                                extra_compile_args={'cxx': [],
+                                                    'nvcc': ['-arch=sm_35', '-O3', '-allow-unsupported-compiler']})
+              ],
+              cmdclass={
+                  'build_ext': BuildExtension
+              })
+    except Exception:
+        setup(use_pyscaffold=True,
+              ext_modules=[
+                  CUDAExtension(module_name,
+                                [generated_file] + cuda_sources,
+                                extra_compile_args={'cxx': [],
+                                                    'nvcc': ['-arch=sm_35', '-O3']})
+              ],
+              cmdclass={
+                  'build_ext': BuildExtension
+              })
