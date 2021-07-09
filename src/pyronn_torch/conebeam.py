@@ -110,10 +110,16 @@ class _BackwardProjection(torch.autograd.Function):
 
 
 class ConeBeamProjector:
-    def __init__(self, volume_shape, volume_spacing, volume_origin,
-                 projection_shape, projection_spacing, projection_origin,
-                 source_isocenter_distance, source_detector_distance,
-                 projection_matrices):
+    def __init__(self,
+                 volume_shape,
+                 volume_spacing,
+                 volume_origin,
+                 projection_shape,
+                 projection_spacing,
+                 projection_origin,
+                 projection_matrices,
+                 source_isocenter_distance=1,
+                 source_detector_distance=1):
         self._volume_shape = volume_shape
         self._volume_origin = volume_origin
         self._volume_spacing = volume_spacing
@@ -224,7 +230,7 @@ class ConeBeamProjector:
             tuple(map(torch.from_numpy, source_points))).float().cuda().contiguous()
 
         self._projection_multiplier = self._source_isocenter_distance * self._source_detector_distance * \
-                                      self._projection_spacing[-1] * np.pi / self._projection_shape[0]
+            self._projection_spacing[-1] * np.pi / self._projection_shape[0]
 
     @property
     def projection_matrices(self):

@@ -80,6 +80,7 @@ Usage
                     1.44000000e+5],
                    [-9.99847710e-01, -1.74524058e-2,  0.00000000e+0,
                     6.00000000e+2]]])  # two projection matrices in shape (n, 3, 4)
+                    # optionally: source_isocenter_distance=1, source_detector_distance=1 for a scalar weighting the projections
     )
     projection = projector.new_projection_tensor(requires_grad=True)
 
