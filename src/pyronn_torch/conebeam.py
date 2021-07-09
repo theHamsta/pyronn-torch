@@ -6,7 +6,7 @@
 
 """
 import numpy as np
-import sympy as sp
+import scipy.linalg
 import torch
 
 import pyronn_torch
@@ -112,6 +112,7 @@ class _BackwardProjection(torch.autograd.Function):
 class ConeBeamProjector:
     def __init__(self, volume_shape, volume_spacing, volume_origin,
                  projection_shape, projection_spacing, projection_origin,
+                 source_isocenter_distance, source_detector_distance,
                  projection_matrices):
         self._volume_shape = volume_shape
         self._volume_origin = volume_origin
@@ -120,6 +121,8 @@ class ConeBeamProjector:
         self._projection_matrices_numpy = projection_matrices
         self._projection_spacing = projection_spacing
         self._projection_origin = projection_origin
+        self._source_isocenter_distance = source_isocenter_distance
+        self._source_detector_distance = source_detector_distance
         self._calc_inverse_matrices()
 
     @classmethod
@@ -202,7 +205,7 @@ class ConeBeamProjector:
                                np.float32)
 
         camera_centers = list(map(
-            lambda x: np.array(sp.Matrix(x).nullspace(), np.float32),
+            lambda x: np.array(np.expand_dims(scipy.linalg.null_space(x), 0), np.float32),
             self._projection_matrices_numpy))
 
         source_points = list(map(
@@ -219,7 +222,9 @@ class ConeBeamProjector:
             tuple(map(torch.from_numpy, inv_matrices))).float().cuda().contiguous()
         self._source_points = torch.stack(
             tuple(map(torch.from_numpy, source_points))).float().cuda().contiguous()
-        self._projection_multiplier = 1. / self._projection_matrices.shape[0]
+        # todo need a special multiplier to get the weighting correct
+        self._projection_multiplier = self._source_isocenter_distance * self._source_detector_distance * \
+                                      self._projection_spacing[-1] * np.pi / self._projection_shape[0]
 
     @property
     def projection_matrices(self):
