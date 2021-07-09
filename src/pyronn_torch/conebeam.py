@@ -222,7 +222,7 @@ class ConeBeamProjector:
             tuple(map(torch.from_numpy, inv_matrices))).float().cuda().contiguous()
         self._source_points = torch.stack(
             tuple(map(torch.from_numpy, source_points))).float().cuda().contiguous()
-        # todo need a special multiplier to get the weighting correct
+
         self._projection_multiplier = self._source_isocenter_distance * self._source_detector_distance * \
                                       self._projection_spacing[-1] * np.pi / self._projection_shape[0]
 
