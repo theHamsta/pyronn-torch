@@ -117,7 +117,7 @@ class ParallelProjector:
 
         projs = []
         for i, slice in enumerate(volume):
-            projs.append(_ForwardProjection().apply(slice[0], State(
+            projs.append(_ForwardProjection.apply(slice[0], State(
                 self._detector_origin,
                 self._detector_spacing,
                 self._projection_shape,
@@ -143,7 +143,7 @@ class ParallelProjector:
                              requires_grad=projection.requires_grad).cuda()
 
         for i, proj in enumerate(projection):
-            volume[i] = _BackwardProjection().apply(proj, State(
+            volume[i] = _BackwardProjection.apply(proj, State(
                 self._detector_origin,
                 self._detector_spacing,
                 self._projection_shape,
