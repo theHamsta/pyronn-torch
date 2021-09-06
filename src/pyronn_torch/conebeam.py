@@ -169,7 +169,7 @@ class ConeBeamProjector:
                            device='cuda')
 
     def project_forward(self, volume, step_size=1., use_texture=True):
-        return _ForwardProjection().apply(
+        return _ForwardProjection.apply(
             volume,
             State(projection_shape=self._projection_shape,
                   volume_shape=self._volume_shape,
@@ -186,7 +186,7 @@ class ConeBeamProjector:
                          projection_stack,
                          step_size=1.,
                          use_texture=True):
-        return _BackwardProjection().apply(
+        return _BackwardProjection.apply(
             projection_stack,
             State(projection_shape=self._projection_shape,
                   volume_shape=self._volume_shape,
