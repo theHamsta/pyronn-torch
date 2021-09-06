@@ -116,7 +116,7 @@ class ConeBeamProjector:
                  volume_origin,
                  projection_shape,
                  projection_spacing,
-                 #projection_origin,
+                 projection_origin,
                  projection_matrices,
                  source_isocenter_distance=1,
                  source_detector_distance=1):
@@ -126,7 +126,7 @@ class ConeBeamProjector:
         self._projection_shape = projection_shape
         self._projection_matrices_numpy = projection_matrices
         self._projection_spacing = projection_spacing
-        #self._projection_origin = projection_origin
+        self._projection_origin = projection_origin
         self._source_isocenter_distance = source_isocenter_distance
         self._source_detector_distance = source_detector_distance
         self._calc_inverse_matrices()
@@ -143,10 +143,10 @@ class ConeBeamProjector:
             pyconrad.config.get_geometry().getPixelDimensionX(),
             pyconrad.config.get_geometry().getPixelDimensionY(),
         ]
-        # projection_origin = [
-        #     pyconrad.config.get_geometry().getDetectorOffsetU(),
-        #     pyconrad.config.get_geometry().getDetectorOffsetV(),
-        # ]
+        projection_origin = [
+            pyconrad.config.get_geometry().getDetectorOffsetU(),
+            pyconrad.config.get_geometry().getDetectorOffsetV(),
+        ]
         projection_matrices = pyconrad.config.get_projection_matrices()
 
         obj = cls(volume_shape=volume_shape,
@@ -154,7 +154,7 @@ class ConeBeamProjector:
                   volume_origin=volume_origin,
                   projection_shape=projection_shape,
                   projection_spacing=projection_spacing,
-                  #projection_origin=projection_origin,
+                  projection_origin=projection_origin,
                   projection_matrices=projection_matrices)
         return obj
 
