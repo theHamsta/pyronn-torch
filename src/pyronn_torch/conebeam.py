@@ -53,9 +53,9 @@ class _ForwardProjection(torch.autograd.Function):
         assert pyronn_torch.cpp_extension
         if state.with_texture:
             pyronn_torch.cpp_extension.call_Cone_Projection_Kernel_Tex_Interp_Launcher(
-                inv_matrices=state.inverse_matrices,
+                inv_matrices=state.inverse_matrices.cuda().contiguous(),
                 projection=projection,
-                source_points=state.source_points,
+                source_points=state.source_points.cuda().contiguous(),
                 step_size=state.step_size,
                 volume=volume,
                 volume_spacing_x=state.volume_spacing[0],
@@ -63,9 +63,9 @@ class _ForwardProjection(torch.autograd.Function):
                 volume_spacing_z=state.volume_spacing[2])
         else:
             pyronn_torch.cpp_extension.call_Cone_Projection_Kernel_Launcher(
-                inv_matrices=state.inverse_matrices,
+                inv_matrices=state.inverse_matrices.cuda().contiguous(),
                 projection=projection,
-                source_points=state.source_points,
+                source_points=state.source_points.cuda().contiguous(),
                 step_size=state.step_size,
                 volume=volume,
                 volume_spacing_x=state.volume_spacing[0],
@@ -93,7 +93,7 @@ class _ForwardProjection(torch.autograd.Function):
 
         assert pyronn_torch.cpp_extension
         pyronn_torch.cpp_extension.call_Cone_Backprojection3D_Kernel_Launcher(
-            state.projection_matrices, projection_grad,
+            state.projection_matrices.cuda().contiguous(), projection_grad,
             state.projection_multiplier, volume_grad, *state.volume_origin,
             *state.volume_spacing)
 
@@ -205,7 +205,7 @@ class ConeBeamProjector:
         self._projection_matrices = torch.stack(
             tuple(
                 torch.from_numpy(p.astype(np.float32))
-                for p in self._projection_matrices_numpy)).cuda().contiguous()
+                for p in self._projection_matrices_numpy))
 
         inv_spacing = np.array([1 / s for s in self._volume_spacing],
                                np.float32)
@@ -225,9 +225,9 @@ class ConeBeamProjector:
             self._projection_matrices_numpy))
 
         self._inverse_matrices = torch.stack(
-            tuple(map(torch.from_numpy, inv_matrices))).float().cuda().contiguous()
+            tuple(map(torch.from_numpy, inv_matrices))).float()
         self._source_points = torch.stack(
-            tuple(map(torch.from_numpy, source_points))).float().cuda().contiguous()
+            tuple(map(torch.from_numpy, source_points))).float()
 
         self._projection_multiplier = self._source_isocenter_distance * self._source_detector_distance * \
             self._projection_spacing[-1] * np.pi / self._projection_shape[0]
