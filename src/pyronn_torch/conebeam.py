@@ -91,6 +91,7 @@ class ConeBeamProjector:
                  projection_spacing,
                  projection_origin,
                  projection_matrices):
+        assert type(projection_matrices) == np.ndarray and projection_matrices.shape == (projection_shape[0], 3, 4)
         self._volume_shape = volume_shape
         self._volume_origin = volume_origin
         self._volume_spacing = volume_spacing
@@ -152,21 +153,48 @@ class ConeBeamProjector:
                                    use_texture).backward(projection_stack)[0]
 
     def _calc_inverse_matrices(self):
+        """
+        Explanation
+        The projection matrix P consists of a camera intrinsic K, and the extrinsics
+        rotation R and translation t as P = K @ [R|t]. An alternative form uses the
+        camera center C in world coordinates as P = K @ [R|-RC] = [KR|-KRC].
+
+        Given P, we can obtain C = (KR)^-1 @ -(-KRC) = P[:3, :3]^-1 @ -P[:, 3].
+        This is equivalent to the nullspace form used above C = ker(P).
+
+        Furthermore, the inverse matrix M maps a point u = (u, v, 1) on the detector
+        onto a 3D ray direction r as r = Mu. It is defined as M = -(KR)^-1
+
+        The projector starts at the camera position C and steps along the ray
+        direction r for either forward or back projection. All points along the
+        line L = C + s*r, where s is in (0-sdd) are integrated over for the line
+        integral at detector position u.
+
+        For details see here https://ksimek.github.io/2012/08/22/extrinsic/
+
+        :param matrices: maps a homogenous voxel index x to a detector index u through u = Px. Shaped (p, 3, 4)
+        :return: None
+        """
         if self._projection_matrices_numpy is None:
             return
-        self._projection_matrices = torch.stack(tuple(
-            map(torch.from_numpy, self._projection_matrices_numpy))).cuda().contiguous()
 
-        inv_spacing = np.array([1/s for s in reversed(self._volume_spacing)], np.float32)
+        with torch.no_grad():
+            # if we assumed numpy arrays (not lists of arrays) things would be cleaner imo:
+            self._projection_matrices = torch.from_numpy(self._projection_matrices_numpy).cuda().contiguous()
+            self._volume_origin_tensor = torch.from_numpy(self._volume_origin).cuda()
 
-        camera_centers = np.array(list(map(lambda x: np.array(null_space(x), np.float32),
-                                  self._projection_matrices_numpy)))
+            # volume_spacing was reversed earlier (--> flip)
+            inv_scale = torch.diag(torch.from_numpy(1 / np.flip(self._volume_spacing))).cuda()
 
-        source_points = (camera_centers[:,:3] / camera_centers[:, None, 3] * inv_spacing \
-                - np.array(list(reversed(self._volume_origin))) * inv_spacing).astype(np.float32)
+            # init inverse matrices and source point arrays
+            p, _, _, = self._projection_matrices_numpy.shape
+            self._inverse_matrices = torch.zeros((p, 3, 3), dtype=torch.float32, device='cuda')
+            self._source_points = torch.zeros((p, 3), dtype=torch.float32, device='cuda')
 
-        inv_matrices = (np.linalg.inv(self._projection_matrices_numpy[:,:3, :3]) * inv_spacing).astype(np.float32)
-
-        self._inverse_matrices = torch.stack(tuple(map(torch.from_numpy, inv_matrices))).cuda().contiguous()
-        self._source_points = torch.stack(tuple(map(torch.from_numpy, source_points))).cuda().contiguous()
-        self._projection_multiplier = 1.
+            # calculate derived tensors
+            M = torch.linalg.inv(self._projection_matrices[:, :3, :3])
+            for i in range(p):
+                self._source_points[i] = -M[i] @ self._projection_matrices[i, :, 3] @ inv_scale \
+                                         - self._volume_origin_tensor @ inv_scale
+                self._inverse_matrices[i] = inv_scale @ M[i]
+            self._projection_multiplier = 1.
