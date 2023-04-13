@@ -91,6 +91,7 @@ class ConeBeamProjector:
                  projection_spacing,
                  projection_origin,
                  projection_matrices):
+        assert type(projection_matrices) == np.ndarray and projection_matrices.shape == (projection_shape[0], 3, 4)
         self._volume_shape = volume_shape
         self._volume_origin = volume_origin
         self._volume_spacing = volume_spacing
@@ -152,6 +153,28 @@ class ConeBeamProjector:
                                    use_texture).backward(projection_stack)[0]
 
     def _calc_inverse_matrices(self):
+        """
+        Explanation
+        The projection matrix P consists of a camera intrinsic K, and the extrinsics
+        rotation R and translation t as P = K @ [R|t]. An alternative form uses the
+        camera center C in world coordinates as P = K @ [R|-RC] = [KR|-KRC].
+
+        Given P, we can obtain C = (KR)^-1 @ -(-KRC) = P[:3, :3]^-1 @ -P[:, 3].
+        This is equivalent to the nullspace form used above C = ker(P).
+
+        Furthermore, the inverse matrix M maps a point u = (u, v, 1) on the detector
+        onto a 3D ray direction r as r = Mu. It is defined as M = -(KR)^-1
+
+        The projector starts at the camera position C and steps along the ray
+        direction r for either forward or back projection. All points along the
+        line L = C + s*r, where s is in (0-sdd) are integrated over for the line
+        integral at detector position u.
+
+        For details see here https://ksimek.github.io/2012/08/22/extrinsic/
+
+        :param matrices: maps a homogenous voxel index x to a detector index u through u = Px. Shaped (p, 3, 4)
+        :return: None
+        """
         if self._projection_matrices_numpy is None:
             return
 
